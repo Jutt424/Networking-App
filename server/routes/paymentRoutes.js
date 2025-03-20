@@ -3,7 +3,24 @@ const { withdraw, updatePaymentStatus, getPayments } = require('../controllers/p
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 
-router.post('/withdraw', protect, withdraw);
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      const uploadPath = 'uploads/';
+      if (!fs.existsSync(uploadPath)) {
+          fs.mkdirSync(uploadPath, { recursive: true });
+      }
+      cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
+
+router.post('/withdraw', protect, upload.single('screenshot'), withdraw);
 router.put('/update-status/:paymentId', protect, updatePaymentStatus);
 router.get('/get-payments', protect, getPayments);
 
