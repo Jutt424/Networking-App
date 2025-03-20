@@ -189,9 +189,6 @@ const resetPassword = async (req, res) => {
 };
 
 
-// @desc    Get user data
-// @route   GET /api/users/me
-// @access  Private
 const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -202,6 +199,7 @@ const getMe = async (req, res) => {
   }
 };
 
+
 module.exports = {
   registerUser,
   loginUser,
@@ -209,5 +207,5 @@ module.exports = {
   forgotPassword,
   verifyOtp,
   resetPassword,
-  getReferralCode
+  getReferralCode,
 };

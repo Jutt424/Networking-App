@@ -26,11 +26,12 @@ const Footer = () => {
               <span className="text-xs text-white">Home</span>
             </button>
           </Link>
-          <button className="text-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mx-auto"
-              fill="none"
+          <Link to="/history">
+            <button className="text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 mx-auto"
+                fill="none"
               viewBox="0 0 24 24"
               stroke="white"
             >
@@ -43,6 +44,7 @@ const Footer = () => {
             </svg>
             <span className="text-xs text-white">History</span>
           </button>
+          </Link>
           <Link to="/tasks">
             <button className="text-center">
               <svg

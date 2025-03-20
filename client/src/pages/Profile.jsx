@@ -8,34 +8,7 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [referralCode, setReferralCode] = useState('');
-  const [pendingWithdrawals, setPendingWithdrawals] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchReferralCode = async () => {
-      try {
-        const response = await fetch('/api/user/referral');
-        const data = await response.json();
-        setReferralCode(data.referralCode);
-      } catch (error) {
-        console.error('Failed to fetch referral code', error);
-      }
-    };
-
-    const fetchPendingWithdrawals = async () => {
-      try {
-        const response = await fetch('/api/user/pending-withdrawals');
-        const data = await response.json();
-        setPendingWithdrawals(data.withdrawals || []);
-      } catch (error) {
-        console.error('Failed to fetch pending withdrawals', error);
-      }
-    };
-
-    fetchReferralCode();
-    fetchPendingWithdrawals();
-  }, []);
-
   const getInitial = (name) => name ? name.charAt(0).toUpperCase() : '?';
 
   return (
@@ -83,26 +56,6 @@ const Profile = () => {
               <FaCopy /> Copy Code
             </button>
           </div>
-        </div>
-
-        {/* Pending Withdrawals Section */}
-        <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold text-white">Pending Withdrawals</h2>
-          {pendingWithdrawals.length > 0 ? (
-            <ul className="mt-4 space-y-3">
-              {pendingWithdrawals.map((withdrawal, index) => (
-                <li key={index} className="bg-gray-700 p-3 rounded-lg flex justify-between">
-                  <div>
-                    <p className="font-semibold text-white">Rs{withdrawal.amount}</p>
-                    <p className="text-gray-400 text-sm">Method: {withdrawal.method}</p>
-                  </div>
-                  <span className="text-yellow-400">Pending</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-400 mt-2">No pending withdrawals.</p>
-          )}
         </div>
       </div>
     </main>

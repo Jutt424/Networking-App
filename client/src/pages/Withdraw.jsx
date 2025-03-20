@@ -1,33 +1,47 @@
 import React, { useState } from "react";
-import { Wallet, AlertCircle, BookCopy } from "lucide-react";
+import { BookCopy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
+import { paymentAPI } from "../services/api";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 const Withdraw = () => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [bankName, setBankName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
-
+  const { user } = useContext(AuthContext);
+  console.log(user);
+  const token = localStorage.getItem('token');
   const handleWithdraw = () => {
+  if(token){
+    const data = {
+      userId: user._id,
+      paymentMethod: selectedMethod,
+      accountNumber,
+      amount: withdrawAmount,
+      bankName: selectedMethod === "Bank" ? bankName : null
+    };
+    paymentAPI.withdraw(data);
     setIsDialogOpen(true);
     setTimeout(() => {
-      navigate("/profile"); // Redirect to profile after confirmation
+      navigate("/history");
     }, 2000);
+  }
   };
 
   return (
     <div className="bg-gray-900 h-screen">
       <div className="bg-gray-900 p-4 max-w-lg mx-auto space-y-6 text-white">
-        {/* Withdraw Section */}
         <div className="bg-gray-800 shadow-lg rounded-2xl p-6">
           <h2 className="text-xl font-bold mb-4 text-center">Withdraw</h2>
-          <p className="text-xl font-bold mb-4 text-center">Minimum withdraw ammount 1500</p>
+          <p className="text-xl font-bold mb-4 text-center">Minimum withdraw amount 1500</p>
 
-          {/* Payment Methods */}
           <div className="space-y-3 mb-4">
-            {["JazzCash", "EasyPaisa", "Bank Account"].map((method) => (
+            {["JazzCash", "EasyPaisa", "Bank"].map((method) => (
               <label key={method} className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
@@ -42,7 +56,6 @@ const Withdraw = () => {
             ))}
           </div>
 
-          {/* Account Number Input */}
           {selectedMethod && (
             <input
               type="text"
@@ -53,7 +66,18 @@ const Withdraw = () => {
             />
           )}
 
-          {/* Withdraw Amount Input */}
+          {selectedMethod === "Bank" && (
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Enter your bank name"
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring focus:ring-cyan-500 focus:outline-none"
+              />
+            </div>
+          )}
+
           <div className="mt-4">
             <input
               type="number"
@@ -66,9 +90,9 @@ const Withdraw = () => {
 
           {/* Withdraw Button */}
           <button
-            disabled={!withdrawAmount || !selectedMethod || !accountNumber}
+            disabled={!withdrawAmount || !selectedMethod || !accountNumber || (selectedMethod === "Bank" && !bankName)}
             onClick={handleWithdraw}
-            className={`w-full py-2 mt-4 rounded-lg text-black font-semibold transition-colors ${withdrawAmount && selectedMethod && accountNumber
+            className={`w-full py-2 mt-4 rounded-lg text-black font-semibold transition-colors ${withdrawAmount && selectedMethod && accountNumber && (selectedMethod !== "Bank" || bankName)
                 ? "bg-cyan-500 hover:bg-cyan-400"
                 : "bg-gray-500 cursor-not-allowed"
               }`}
@@ -77,7 +101,6 @@ const Withdraw = () => {
           </button>
         </div>
 
-        {/* Withdraw Confirmation Dialog */}
         <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <Dialog.Panel className="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-96 text-center">
             <Dialog.Title className="text-lg font-bold">Withdrawal Request Sent</Dialog.Title>
@@ -85,17 +108,18 @@ const Withdraw = () => {
           </Dialog.Panel>
         </Dialog>
       </div>
-      <div className="flex items-center justify-center">
 
-      <div className="bg-gray-800 text-white shadow-lg rounded-2xl p-6 max-w-lg ">
-          <h3 className="text-lg font-bold mb-3 flex"> <BookCopy className="w-6 h-6 text-violet-500 mr-2" />Withdraw Instructions</h3>
+      <div className="flex items-center justify-center">
+        <div className="bg-gray-800 text-white shadow-lg rounded-2xl p-6 max-w-lg">
+          <h3 className="text-lg font-bold mb-3 flex">
+            <BookCopy className="w-6 h-6 text-violet-500 mr-2" /> Withdraw Instructions
+          </h3>
           <ul className="list-disc list-inside space-y-2 text-sm">
             <span className=""><span className="font-medium">Note: </span>When you withdraw, the request will be sent to the admin for approval. Feel free to reach out if you have any questions.</span>
           </ul>
-      </div>
+        </div>
       </div>
     </div>
-
   );
 };
 

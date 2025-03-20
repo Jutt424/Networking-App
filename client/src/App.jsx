@@ -18,6 +18,7 @@ import Withdraw from './pages/Withdraw'
 import AdminDashboard from './pages/Dashboard/AdminDashboard'
 import WithdrawRequests from './pages/Dashboard/WithdrawRequests'
 import DepositRequests from './pages/Dashboard/DepositRequests'
+import History from './pages/History'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -90,11 +91,40 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/recharge"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Recharge />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/withdraw"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Withdraw />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <History />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
        
             {/* Catch all route - redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
-            <Route path="/recharge" element={<Recharge />} />
-            <Route path="/withdraw" element={<Withdraw />} />
+            
             <Route path="/dashboard" element={<AdminDashboard />} />
             <Route path="/withdraw-requests" element={<WithdrawRequests />} />
             <Route path="/deposit-requests" element={<DepositRequests />} />

@@ -64,4 +64,13 @@ export const userAPI = {
         API.post('/api/referralCode'),
 };
 
+export const paymentAPI = {
+    withdraw: (data) =>
+        API.post('/api/payments/withdraw', data),
+    getPayments: () =>
+        API.get('/api/payments/get-payments'),
+    updatePaymentStatus: (paymentId, status) =>
+        API.put(`/api/payments/update-status/${paymentId}`, { status }),
+};
+
 export default API;

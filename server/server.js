@@ -1,11 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const bodyParser = require("body-parser");
-const crypto = require("crypto");
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const { forgotPassword, verifyOtp, resetPassword, getReferralCode } = require('./controllers/userController');
+const paymentRoutes = require('./routes/paymentRoutes');
+const {withdraw, updatePaymentStatus, getPayments} = require('./controllers/paymentController');
 dotenv.config();
 
 const app = express();
@@ -32,6 +32,10 @@ app.post('/api/forgotPassword', forgotPassword);
 app.post('/api/verifyOtp', verifyOtp);
 app.post('/api/resetPassword', resetPassword);
 app.post('/api/referralCode', getReferralCode);
+
+app.use('/api/payments', paymentRoutes);
+
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -15,7 +15,7 @@ const Recharge = () => {
     }
   };
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-900 h-screen">
       <div className="p-4 max-w-lg mx-auto space-y-6">
         {/* Deposit Section */}
         <div className="bg-white shadow-lg rounded-2xl p-6">
@@ -28,6 +28,17 @@ const Recharge = () => {
               onChange={(e) => setAmount(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-200 focus:outline-none"
             />
+          </div>
+          <div className="space-y-3">
+            <div className="mt-4">
+              <input type="file" accept="image/*" onChange={handleFileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-200 focus:outline-none" />
+            </div>
+            {screenshot && (
+              <div className="mt-4">
+                <p className="text-gray-800 font-medium">Preview:</p>
+                <img src={screenshot} alt="Payment Screenshot" className="mt-2 rounded-lg border" />
+              </div>
+            )}
           </div>
           <button
             disabled={!amount}
@@ -64,38 +75,6 @@ const Recharge = () => {
                 </button>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Deposit History */}
-        <div className="bg-white shadow-lg rounded-2xl p-6">
-          <h3 className="text-lg font-bold mb-3 text-gray-800">Deposit History</h3>
-          <div className="border-t border-gray-300 pt-3 space-y-3">
-            <div className="flex justify-between items-center text-sm">
-              <span className="font-medium text-gray-800">Time</span>
-              <span className="text-gray-700">2025-01-23 21:55:46</span>
-            </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="font-medium text-gray-800">Order number</span>
-              <span className="text-gray-700">RC2025012321554697768177c</span>
-            </div>
-            <div className="mt-4">
-              <input type="file" accept="image/*" onChange={handleFileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-200 focus:outline-none" />
-            </div>
-            {screenshot && (
-              <div className="mt-4">
-                <p className="text-gray-800 font-medium">Preview:</p>
-                <img src={screenshot} alt="Payment Screenshot" className="mt-2 rounded-lg border" />
-              </div>
-            )}
-            <button
-              disabled={!screenshot}
-              className={`w-full mt-4 py-2 rounded-lg text-white font-semibold transition-colors ${
-                screenshot ? "bg-violet-600 hover:bg-violet-700" : "bg-gray-300 cursor-not-allowed"
-              }`}
-            >
-              Submit Receipt
-            </button>
           </div>
         </div>
       </div>
