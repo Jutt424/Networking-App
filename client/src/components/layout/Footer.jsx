@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div>
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t p-2">
+      <div className="bottom-0 left-0 right-0 bg-gray-900 border-t p-2">
         <div className="flex justify-between items-center">
           <Link to="/">
             <button className="text-center">

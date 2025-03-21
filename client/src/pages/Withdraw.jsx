@@ -14,7 +14,6 @@ const Withdraw = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  console.log(user);
   const token = localStorage.getItem('token');
   const handleWithdraw = () => {
   if(token){

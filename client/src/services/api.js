@@ -69,6 +69,10 @@ export const paymentAPI = {
         API.post('/api/payments/withdraw', data),
     getPayments: () =>
         API.get('/api/payments/get-payments'),
+    recharge: (data) =>
+        API.post('/api/payments/recharge', data),
+    getRecharges: () =>
+        API.get('/api/payments/get-recharges'),
     updatePaymentStatus: (paymentId, status) =>
         API.put(`/api/payments/update-status/${paymentId}`, { status }),
 };

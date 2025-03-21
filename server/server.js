@@ -5,7 +5,7 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const { forgotPassword, verifyOtp, resetPassword, getReferralCode } = require('./controllers/userController');
 const paymentRoutes = require('./routes/paymentRoutes');
-const {withdraw, updatePaymentStatus, getPayments} = require('./controllers/paymentController');
+const rechargeRoutes = require('./routes/rechargeRoutes');
 dotenv.config();
 
 const app = express();
@@ -34,7 +34,7 @@ app.post('/api/resetPassword', resetPassword);
 app.post('/api/referralCode', getReferralCode);
 
 app.use('/api/payments', paymentRoutes);
-
+app.use('/api/recharge', rechargeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

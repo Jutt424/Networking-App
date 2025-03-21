@@ -7,12 +7,6 @@ const paymentSchema = mongoose.Schema({
   bankName: { type: String, default: null }, // Only for bank payments
   amount: { type: Number, required: true },
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }, // Default 'pending'
-
-  // Deposit Schema
-  amount: { type: Number, required: true },
-  screenshot: { type: String, required: true },
-  status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-  createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 
 const Payment = mongoose.model('Payment', paymentSchema);
