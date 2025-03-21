@@ -17,39 +17,45 @@ const Recharge = () => {
 
   const recharge = async () => {
     if (!amount || !screenshot) {
-      alert("Please enter an amount and upload a screenshot!");
-      return;
+        alert("Please enter an amount and upload a screenshot!");
+        return;
     }
 
     const formData = new FormData();
     formData.append("userId", user._id);
     formData.append("amount", amount);
-    formData.append("screenshot", screenshot); // File bhejni zaroori hai
+    formData.append("screenshot", screenshot);
+
+    console.log("FormData Entries:");
+    for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]); // Yeh check karega ke screenshot aa raha hai ya nahi
+    }
 
     try {
-      setLoading(true);
-      const response = await paymentAPI.recharge(formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Important for Multer
-        },
-      }); 
-      console.log("Recharge Successful:", response.data);
-      alert("Recharge request submitted successfully!");
+        setLoading(true);
+        const response = await paymentAPI.recharge(formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        console.log("Recharge Successful:", response.data);
+        alert("Recharge request submitted successfully!");
     } catch (error) {
-      console.error("Recharge Error:", error);
-      alert("Something went wrong! Please try again.");
+        console.error("Recharge Error:", error);
+        alert("Something went wrong! Please try again.");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+      console.log("Selected file:", file);
       setScreenshot(file);
       setPreview(URL.createObjectURL(file)); // Preview ke liye
-    }
-  };
+  }
+};
 
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center p-4">
