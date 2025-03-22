@@ -69,16 +69,20 @@ export const paymentAPI = {
         API.post('/api/payments/withdraw', data),
     getPayments: () =>
         API.get('/api/payments/get-payments'),
+    updatePaymentStatus: (paymentId, status) =>
+        API.put(`/api/payments/update-status/${paymentId}`, { status }),
+    getAllPayments: () =>
+        API.get('/api/payments/get-all-payments'),
+
+
     recharge: (formData) =>
-        API.post('/api/payments/recharge', formData, {
+        API.post('/api/recharge', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         }),
     getRecharges: () =>
-        API.get('/api/payments/get-recharges'),
-    updatePaymentStatus: (paymentId, status) =>
-        API.put(`/api/payments/update-status/${paymentId}`, { status }),
-};
+        API.get('/api/recharge/get-recharges'),
+}; 
 
 export default API;

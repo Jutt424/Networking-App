@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post('/recharge', protect, upload.single('screenshot'), recharge);
+router.post('/', protect, upload.single('screenshot'), recharge);
 router.get('/get-recharges', protect, getRecharges);
 
 module.exports = router;

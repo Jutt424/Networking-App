@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { paymentAPI } from "../../services/api";
 
 const DepositRequests = () => {
-  // Dummy Data
-  const deposits = [
-    { id: 1, user: "Ali Khan", amount: "Rs 10,000", status: "Pending" },
-    { id: 2, user: "Sara Ahmed", amount: "Rs 25,000", status: "Approved" },
-    { id: 3, user: "Usman Raza", amount: "Rs 15,000", status: "Rejected" },
-  ];
+  const token = localStorage.getItem('token');
+  const [deposits, setDeposits] = useState([]);
 
+  useEffect(() => {
+    if (token) {
+      const fetchDeposits = async () => {
+        try {
+          const response = await paymentAPI .getRecharges();
+          const data = await response.data;
+          console.log(data);
+          setDeposits(data.payments || []);
+        } catch (error) {
+          console.error('Failed to fetch deposits', error);
+        }
+      };
+      fetchDeposits();
+    }
+  }, [token]);
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg min-h-screen">
       <h2 className="text-2xl font-bold text-cyan-400 mb-4">Deposit Requests</h2>
       <table className="w-full text-white">
         <thead>

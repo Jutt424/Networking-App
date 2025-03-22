@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import InvestmentPlan from "./InvestmentPlan";
 
 const LandingPage = () => {
   return (
@@ -60,6 +61,7 @@ const LandingPage = () => {
       <section className="mt-20 max-w-6xl w-full text-center">
         <h3 className="text-4xl font-bold text-cyan-400 mb-6">Choose Your Investment Package</h3>
         <p className="text-lg text-gray-300 mb-8">Select from our best-in-class investment packages to start earning profits today.</p>
+        <InvestmentPlan />
       </section>
 
       {/* Testimonials / Trusted By Thousands */}

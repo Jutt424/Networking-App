@@ -46,7 +46,9 @@ const History = () => {
                                     {/* ✅ Account Number Display */}
                                     <p className="text-gray-400 text-sm">Account: {withdrawal.accountNumber}</p>
                                 </div>
-                                <span className="text-yellow-400">{withdrawal.status}</span>
+                                {withdrawal.status === "pending" && <span className="text-yellow-400">{withdrawal.status}</span>}
+                                {withdrawal.status === "approved" && <span className="text-green-400">{withdrawal.status}</span>}
+                                {withdrawal.status === "rejected" && <span className="text-red-400">{withdrawal.status}</span>}
                             </li>
                         ))}
                     </ul>

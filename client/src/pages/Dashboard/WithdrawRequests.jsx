@@ -1,30 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { CheckCircle, XCircle, Search } from "lucide-react";
+import { paymentAPI } from "../../services/api";
 
 const WithdrawRequests = () => {
   const [requests, setRequests] = useState([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // Fetch withdraw requests from API (Replace with actual API call)
-    setRequests([
-      { id: 1, user: "Ali Khan", amount: "Rs5000", method: "JazzCash", status: "Pending" },
-      { id: 2, user: "Sara Ahmed", amount: "Rs3000", method: "Bank Transfer", status: "Completed" },
-    ]);
+    paymentAPI.getAllPayments()
+      .then(res => {
+        console.log(res.data);
+        setRequests(res.data.payments)
+      })
+      .catch(err => console.error(err));
   }, []);
 
+  const updateStatus = (id, status) => {
+    paymentAPI.updatePaymentStatus(id, status)
+      .then(() => {
+        setRequests(requests.map(req => req.id === id ? { ...req, status } : req));
+      })
+      .catch(err => console.error(err));
+  };
+
   const handleApprove = (id) => {
-    setRequests(requests.map(req => req.id === id ? { ...req, status: "Completed" } : req));
+    updateStatus(id, "approved");
   };
 
   const handleReject = (id) => {
-    setRequests(requests.map(req => req.id === id ? { ...req, status: "Rejected" } : req));
+    updateStatus(id, "rejected");
   };
 
   return (
     <div className="bg-gray-900 min-h-screen p-6 text-white">
       <h2 className="text-2xl font-bold mb-4">Withdraw Requests</h2>
-      
+
       {/* Search Bar */}
       <div className="relative mb-4">
         <input
@@ -46,34 +56,40 @@ const WithdrawRequests = () => {
               <th className="p-2">Amount</th>
               <th className="p-2">Method</th>
               <th className="p-2">Status</th>
+              <th className="p-2">Created At</th>
               <th className="p-2">Action</th>
             </tr>
           </thead>
           <tbody>
-            {requests.filter(req => req.user.toLowerCase().includes(search.toLowerCase())).map((req) => (
-              <tr key={req.id} className="border-b border-gray-700">
-                <td className="p-2">{req.user}</td>
-                <td className="p-2">{req.amount}</td>
-                <td className="p-2">{req.method}</td>
-                <td className={`p-2 font-semibold ${req.status === "Pending" ? "text-yellow-400" : req.status === "Completed" ? "text-green-400" : "text-red-400"}`}>{req.status}</td>
+            {requests.map(request => (
+              <tr key={request._id} className="border-b border-gray-700">
+                <td className="p-2">{request.userId.name}</td>
+                <td className="p-2">{request.amount}</td>
+                <td className="p-2">{request.paymentMethod}</td>
+                <td className={`p-2 font-semibold ${request.status === "rejected" ? "text-red-400" : request.status === "approved" ? "text-green-400" : "text-yellow-400"}`}>{request.status}</td>
                 <td className="p-2 flex gap-2">
-                  {req.status === "Pending" && (
-                    <>
-                      <button
-                        className="bg-green-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-green-700"
-                        onClick={() => handleApprove(req.id)}
-                      >
-                        <CheckCircle className="w-4 h-4" /> Approve
-                      </button>
-                      <button
-                        className="bg-red-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-red-700"
-                        onClick={() => handleReject(req.id)}
-                      >
-                        <XCircle className="w-4 h-4" /> Reject
-                      </button>
-                    </>
-                  )}
                 </td>
+                <td className="p-2 flex gap-2"> {new Date(request.createdAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}</td>
+                <td className="p-2"> 
+                  <div className="flex gap-2">
+                    <button
+                    className="bg-green-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-green-700"
+                    onClick={() => handleApprove(request._id)}
+                  >
+                  <CheckCircle className="w-4 h-4" /> Approve
+                </button>
+                  <button
+                    className="bg-red-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-red-700"
+                    onClick={() => handleReject(request._id)}
+                  >
+                    <XCircle className="w-4 h-4" /> Reject
+                  </button>
+                  </div>
+                  </td>
               </tr>
             ))}
           </tbody>

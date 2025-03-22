@@ -32,7 +32,6 @@ const recharge = async (req, res) => {
         if (status) {
             filter.status = status;
         }
-  
         const recharges = await recharge.find(filter).populate('userId', 'name email').sort({ createdAt: -1 });
         res.status(200).json({ message: 'Recharges fetched successfully', recharges });
   
