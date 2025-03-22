@@ -9,7 +9,7 @@ import Login from './auth/Login'
 import { AuthProvider, AuthContext } from './context/AuthContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import ForgotPassword from './auth/ForgotPassword'
 import OTPVerification from './auth/OTPVerification'
 import ResetPassword from './auth/ResetPassword'
@@ -19,6 +19,9 @@ import AdminDashboard from './pages/Dashboard/AdminDashboard'
 import WithdrawRequests from './pages/Dashboard/WithdrawRequests'
 import DepositRequests from './pages/Dashboard/DepositRequests'
 import History from './pages/History'
+
+import {jwtDecode} from 'jwt-decode';
+import { useEffect } from 'react';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -49,6 +52,18 @@ const Layout = ({ children }) => {
 };
 
 function App() {
+  const [role, setRole] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      // console.log(decodedToken);
+      setRole(decodedToken.role);
+      setUserId(decodedToken.id);
+    }
+  }, [token]);
   return (
     <Router>
       <AuthProvider>
