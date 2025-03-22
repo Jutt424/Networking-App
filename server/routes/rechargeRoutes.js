@@ -1,5 +1,5 @@
 const express = require('express');
-const { recharge, getRecharges } = require('../controllers/rechargeController');
+const { recharge, getRecharges, updateRechargeStatus, getUserRecharges } = require('../controllers/rechargeController');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const fs = require('fs');
@@ -22,5 +22,7 @@ const upload = multer({ storage });
 
 router.post('/', protect, upload.single('screenshot'), recharge);
 router.get('/get-recharges', protect, getRecharges);
+router.put('/update-status/:id', protect, updateRechargeStatus);
+router.get('/get-user-recharges', protect, getUserRecharges);
 
 module.exports = router;

@@ -10,8 +10,8 @@ const Home = () => {
     <div className="min-h-screen">
         <LandingPage />
         {/* <AdminDashboard /> */}
-        <Dashboard />
-        <AdminPanel />
+        {/* <Dashboard />
+        <AdminPanel /> */}
     </div>
   )
 }

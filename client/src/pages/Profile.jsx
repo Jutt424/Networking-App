@@ -4,12 +4,27 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaUserEdit, FaLock, FaSignOutAlt, FaCopy, FaWallet, FaRegHeart, FaHistory } from 'react-icons/fa';
 import { PiHandDepositFill } from "react-icons/pi";
 import { BiMoneyWithdraw } from "react-icons/bi";
+import { paymentAPI } from '../services/api';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [referralCode, setReferralCode] = useState('');
+  const [wallet, setWallet] = useState(null);
   const navigate = useNavigate();
   const getInitial = (name) => name ? name.charAt(0).toUpperCase() : '?';
+
+  useEffect(() => {
+    const fetchWallet = async () => {
+      try {
+        const response = await paymentAPI.wallet.getUserWallet(user._id);
+        console.log(response);
+        setWallet(response.data);
+      } catch (error) {
+        console.error('Error fetching wallet:', error);
+      }
+    };
+    fetchWallet();
+  }, [user._id]);
 
   return (
     <main className="min-h-screen bg-gray-900 text-white p-6 pb-24">
@@ -29,7 +44,7 @@ const Profile = () => {
         <div className="grid grid-cols-3 gap-4 mt-6">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
             <FaWallet className="text-cyan-400 text-2xl mx-auto" />
-            <p className="text-lg font-bold mt-2">$337</p>
+            <p className="text-lg font-bold mt-2">{wallet?.balance || 0}</p>
             <p className="text-gray-400 text-sm">Wallet Balance</p>
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center justify-center flex flex-col items-center gap-2">

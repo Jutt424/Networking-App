@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+export const serverUrl = "http://localhost:5000";
 const API = axios.create({
     baseURL: import.meta.env.VITE_BASE_URI || 'http://localhost:5000',
     headers: {
@@ -83,6 +83,15 @@ export const paymentAPI = {
         }),
     getRecharges: () =>
         API.get('/api/recharge/get-recharges'),
+    updateRechargeStatus: (rechargeId, status) =>
+        API.put(`/api/recharge/update-status/${rechargeId}`, { status }),
+    getUserRecharges: (userId) =>
+        API.get(`/api/recharge/get-user-recharges?userId=${userId}`),
+
+    wallet: {
+        getUserWallet: (userId) =>
+            API.get(`/api/wallet/get-wallet?userId=${userId}`),
+    },
 }; 
 
 export default API;

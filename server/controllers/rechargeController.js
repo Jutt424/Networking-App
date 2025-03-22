@@ -1,4 +1,5 @@
 const Recharge = require('../models/rechargeModal.js');
+const Wallet = require('../models/walletModel.js');
 const recharge = async (req, res) => {
     try {
         const { amount } = req.body;
@@ -27,17 +28,20 @@ const recharge = async (req, res) => {
   
   const getRecharges = async (req, res) => {
     try {
-        const { status } = req.query;
-        let filter = {};
-        if (status) {
-            filter.status = status;
-        }
-        const recharges = await recharge.find(filter).populate('userId', 'name email').sort({ createdAt: -1 });
-        res.status(200).json({ message: 'Recharges fetched successfully', recharges });
+      const { status } = req.query;
+      let filter = {};
+      if (status) {
+        filter.status = status;
+      }
+      const recharges = await Recharge.find(filter)
+        .populate('userId', 'name email')
+        .sort({ createdAt: -1 });
+  
+      res.status(200).json({ message: 'Recharges fetched successfully', recharges });
   
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching recharges', error });
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching recharges', error });
     }
   };
   
@@ -50,23 +54,60 @@ const recharge = async (req, res) => {
             return res.status(400).json({ message: 'Invalid status value' });
         }
   
-        const recharge = await recharge.findByIdAndUpdate(id, { status }, { new: true });
-  
-        if (!recharge) {
+        const updatedRecharge = await Recharge.findByIdAndUpdate(id, { status }, { new: true });
+        if (status === 'approved') {
+            let wallet = await Wallet.findOne({ userId: updatedRecharge.userId });
+      
+            if (wallet) {
+              // Update existing wallet
+              wallet.wallet += updatedRecharge.amount;
+              wallet.lastRecharge = new Date().toISOString();
+            } else {
+                // Create new wallet with recharge amount
+                wallet = new Wallet({
+                    userId: updatedRecharge.userId,
+                    wallet: updatedRecharge.amount,
+                    lastRecharge: new Date().toISOString(),
+                    lastWithdrawPaid: false
+                });
+            }
+            await wallet.save();
+        }
+        if (!updatedRecharge) {
             return res.status(404).json({ message: 'Recharge not found' });
         }
   
-        res.status(200).json({ message: `Recharge ${status} successfully`, recharge });
+        res.status(200).json({ message: `Recharge ${status} successfully`, updatedRecharge });
   
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error updating recharge status', error });
     }
   };
+  const getUserRecharges = async (req, res) => {
+    try {
+      const { status } = req.query;
+      const userId = req.user._id;
+  
+      let filter = { userId };
+      if (status) {
+        filter.status = status;
+      }
+  
+      const recharges = await Recharge.find(filter).sort({ createdAt: -1 });
+  
+      res.status(200).json({ message: 'User recharges fetched successfully', recharges });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching user recharges', error });
+    }
+  };
+  
 
   module.exports = {
     recharge,
     getRecharges,
     updateRechargeStatus,
+    getUserRecharges,
   };
   

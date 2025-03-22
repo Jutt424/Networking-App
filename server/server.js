@@ -6,6 +6,9 @@ const userRoutes = require('./routes/userRoutes');
 const { forgotPassword, verifyOtp, resetPassword, getReferralCode } = require('./controllers/userController');
 const paymentRoutes = require('./routes/paymentRoutes');
 const rechargeRoutes = require('./routes/rechargeRoutes');
+const walletRoutes = require('./routes/walletRoutes');
+const path = require('path');
+const { fileURLToPath } = require('url');
 dotenv.config();
 
 const app = express();
@@ -35,6 +38,9 @@ app.post('/api/referralCode', getReferralCode);
 
 app.use('/api/payments', paymentRoutes);
 app.use('/api/recharge', rechargeRoutes);
+app.use('/api/wallet', walletRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

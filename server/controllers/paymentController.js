@@ -1,4 +1,5 @@
 const Payment = require('../models/Payment.js');
+const Wallet = require('../models/walletModel.js');
 
 const withdraw = async (req, res) => {
   try {
@@ -30,17 +31,27 @@ const withdraw = async (req, res) => {
 const updatePaymentStatus = async (req, res) => {
   try {
     const { paymentId } = req.params;
-    const { status } = req.body;
+    const { status, userId=req.user._id } = req.body;
 
     if (!['approved', 'rejected'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status value' });
     }
-
     const payment = await Payment.findByIdAndUpdate(paymentId, { status }, { new: true });
-
     if (!payment) {
       return res.status(404).json({ message: 'Payment not found' });
     }
+
+    const { amount } = payment;
+    if(status === 'approved') {
+      const wallet = await Wallet.findOne({ userId });
+      if (!wallet) {
+        return res.status(404).json({ message: 'Wallet not found' });
+      }
+      wallet.wallet -= amount;
+      await wallet.save();
+    }
+
+    
 
     res.status(200).json({ message: `Payment ${status} successfully`, payment });
   } catch (error) {
