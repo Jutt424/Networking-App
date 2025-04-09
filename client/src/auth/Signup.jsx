@@ -10,6 +10,7 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
+    referredBy: "", // Add this line
   });
 
   const [errors, setErrors] = useState({});
@@ -63,7 +64,11 @@ const Signup = () => {
     if (validate()) {
       setLoading(true);
       try {
-        const response = await authAPI.register(formData);
+        debugger
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get("ref");
+        setFormData((prev) => ({ ...prev, referredBy: ref }));
+        const response = await authAPI.register({...formData, referredBy: ref });
         if (response.status === 201) {
           toast.success("Registration successful! Please login.");
           navigate("/auth/login");

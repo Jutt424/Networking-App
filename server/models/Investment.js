@@ -6,7 +6,11 @@ const investmentSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   profitPerDay: { type: Number, required: true },
   nextProfitTime: { type: Date, required: true }, // agla profit kab milay ga
-  isCompleted: { type: Boolean, default: false } // agar limited duration ka plan ho
+  isCompleted: { type: Boolean, default: false }, // agar limited duration ka plan ho
+  totalProfitDistributed: {
+    type: Number,
+    default: 0
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Investment', investmentSchema);

@@ -32,7 +32,7 @@ const History = () => {
                 try {
                     const response = await paymentAPI.getUserRecharges({ userId: user._id });
                     const data = await response.data;
-                    console.log(data);
+                    // console.log(data);
                     setPendingRecharges(data.recharges || []);
                 } catch (error) {
                     console.error('Failed to fetch user recharges', error);

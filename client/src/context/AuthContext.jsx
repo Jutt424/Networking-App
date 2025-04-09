@@ -19,6 +19,7 @@ const AuthProvider = ({ children }) => {
         try {
           const response = await authAPI.getProfile();
           setUser(response.data);
+          // console.log(response.data);
           setIsAuthenticated(true);
         } catch (error) {
           console.error('Auth check failed:', error);

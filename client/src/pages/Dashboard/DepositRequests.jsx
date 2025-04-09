@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { paymentAPI, serverUrl } from "../../services/api";
 import { CheckCircle, XCircle } from "lucide-react";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 const DepositRequests = () => {
   const token = localStorage.getItem('token');
   const [deposits, setDeposits] = useState([]);
   const [previewSrc, setPreviewSrc] = useState(null);
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     if (token) {
       const fetchDeposits = async () => {
         try {
           const response = await paymentAPI.getRecharges();
           const data = response.data;
-          console.log(data);
+          // console.log(data);
+          setTotal(data.totalRecharges);
           setDeposits(data.recharges || []);
         } catch (error) {
           console.error('Failed to fetch deposits', error);
@@ -39,9 +42,13 @@ const DepositRequests = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg min-h-screen">
-      <h2 className="text-2xl font-bold text-cyan-400 mb-4">Deposit Requests</h2>
-      <table className="w-full text-white">
+    <div className="bg-gray-900 p-6 min-h-screen">
+      <div className="bg-gray-800 p-6 rounded-lg text-center shadow-lg max-w-md">
+        <FaMoneyCheckAlt className="text-cyan-400 text-3xl mx-auto" />
+        <p className="text-xl font-bold mt-2 text-white ">{total}</p>
+        <p className="text-gray-400">Total Deposits</p>
+      </div>
+      <table className="w-full text-white mt-8">
         <thead>
           <tr className="border-b border-gray-700">
             <th className="p-3 text-left">User</th>

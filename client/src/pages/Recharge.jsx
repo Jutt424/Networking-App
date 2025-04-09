@@ -3,7 +3,8 @@ import { BookCopy } from "lucide-react";
 import { FaCopy } from "react-icons/fa";
 import { paymentAPI } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-
+import uzairQR from "../assets/uzairQR.jpg";
+import { toast, ToastContainer } from "react-toastify";
 const Recharge = () => {
   const [amount, setAmount] = useState("");
   const [screenshot, setScreenshot] = useState(null);
@@ -12,9 +13,15 @@ const Recharge = () => {
   const { user } = useContext(AuthContext);
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast.success("Address copied to clipboard!");
+      })
+      .catch(() => {
+        toast.error("Failed to copy.");
+      });
   };
-
+  
   const recharge = async () => {
     if (!amount || !screenshot) {
         alert("Please enter an amount and upload a screenshot!");
@@ -26,9 +33,9 @@ const Recharge = () => {
     formData.append("amount", amount);
     formData.append("screenshot", screenshot);
 
-    console.log("FormData Entries:");
+    // console.log("FormData Entries:");
     for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]); // Yeh check karega ke screenshot aa raha hai ya nahi
+        // console.log(pair[0], pair[1]); // Yeh check karega ke screenshot aa raha hai ya nahi
     }
 
     try {
@@ -61,6 +68,17 @@ const handleFileChange = (e) => {
     <div className="bg-gray-900 min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-lg space-y-6">
         {/* Deposit Section */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
         <div className="bg-gray-800 shadow-lg rounded-2xl p-6 text-white">
           <h2 className="text-xl font-bold text-center mb-4">Deposit Amount</h2>
           <input
@@ -106,17 +124,17 @@ const handleFileChange = (e) => {
           <p className="font-bold text-xl mt-4">Bank Details:</p>
           <div className="mt-4 space-y-3">
             {[
-              { name: 'UBL', number: '1234-5678-9012' },
-              { name: 'HBL', number: '2345-6789-0123' },
-              { name: 'MCB', number: '3456-7890-1234' },
-              { name: 'Allied Bank', number: '4567-8901-2345' }
+              { name: 'TRC 20', number: 'TPuAtywHNgDJkGTZqqaSQDBdeZTfJhRzFN' },
             ].map((bank, index) => (
+              <>
               <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
-                <span className="text-md font-medium">{bank.name}: {bank.number}</span>
+                <span className="text-md font-medium">{bank.name}: <span className="text-cyan-400 text-xs">{bank.number}</span></span>
                 <button onClick={() => copyToClipboard(bank.number)} className="text-cyan-400 hover:text-cyan-300">
                   <FaCopy />
                 </button>
               </div>
+              <img src={uzairQR} alt="" className="w-full" />
+              </>
             ))}
           </div>
         </div>

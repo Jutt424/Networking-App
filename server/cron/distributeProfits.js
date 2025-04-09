@@ -13,7 +13,7 @@ const distributeProfits = async () => {
 
     for (const investment of investments) {
       const wallet = await Wallet.findOne({ userId: investment.userId });
-
+      investment.totalProfitDistributed += investment.profitPerDay; // ✅ add this line
       if (wallet) {
         wallet.wallet += investment.profitPerDay;
         await wallet.save();

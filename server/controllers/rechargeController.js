@@ -33,17 +33,25 @@ const recharge = async (req, res) => {
       if (status) {
         filter.status = status;
       }
+  
       const recharges = await Recharge.find(filter)
         .populate('userId', 'name email')
         .sort({ createdAt: -1 });
   
-      res.status(200).json({ message: 'Recharges fetched successfully', recharges });
+      const total = await Recharge.countDocuments(filter); // ✅ count based on filter
+  
+      res.status(200).json({ 
+        message: 'Recharges fetched successfully', 
+        totalRecharges: total, // ✅ total added here
+        recharges 
+      });
   
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error fetching recharges', error });
     }
   };
+  
   
   const updateRechargeStatus = async (req, res) => {
     try {

@@ -9,7 +9,7 @@ import Login from './auth/Login'
 import { AuthProvider, AuthContext } from './context/AuthContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import ForgotPassword from './auth/ForgotPassword'
 import OTPVerification from './auth/OTPVerification'
 import ResetPassword from './auth/ResetPassword'
@@ -19,9 +19,8 @@ import AdminDashboard from './pages/Dashboard/AdminDashboard'
 import WithdrawRequests from './pages/Dashboard/WithdrawRequests'
 import DepositRequests from './pages/Dashboard/DepositRequests'
 import History from './pages/History'
+import { authAPI } from './services/api'
 
-import {jwtDecode} from 'jwt-decode';
-import { useEffect } from 'react';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -52,18 +51,25 @@ const Layout = ({ children }) => {
 };
 
 function App() {
-  const [role, setRole] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const token = localStorage.getItem("token");
-
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      // console.log(decodedToken);
-      setRole(decodedToken.role);
-      setUserId(decodedToken.id);
-    }
-  }, [token]);
+      const checkAuth = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          try {
+            const response = await authAPI.getProfile();
+            setUser(response.data);
+            console.log(response.data);
+          } catch (error) {
+            console.error('Auth check failed:', error);
+            localStorage.removeItem('token');
+          }
+        }
+        setLoading(false);
+      };
+      checkAuth();
+    }, []);
   return (
     <Router>
       <AuthProvider>
@@ -140,9 +146,13 @@ function App() {
             {/* Catch all route - redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
             
-            <Route path="/dashboard" element={<AdminDashboard />} />
-            <Route path="/withdraw-requests" element={<WithdrawRequests />} />
-            <Route path="/deposit-requests" element={<DepositRequests />} />
+            {user?.role === 'admin' && (
+              <>
+                <Route path="/dashboard" element={<AdminDashboard />} />
+                <Route path="/withdraw-requests" element={<WithdrawRequests />} />
+                <Route path="/deposit-requests" element={<DepositRequests />} />
+              </>
+            )}
           </Routes>
         <ToastContainer
           position="top-right"

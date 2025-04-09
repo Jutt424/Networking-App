@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, getReferralCode, getMe, forgotPassword, verifyOtp, resetPassword } = require('../controllers/userController');
+const { registerUser, loginUser, getReferralCode, getMe, getAllUsers, getTotalWalletBalance, forgotPassword, verifyOtp, resetPassword } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -10,5 +10,6 @@ router.post('/forgotPassword',forgotPassword);
 router.post('/verifyOtp', verifyOtp);
 router.post('/resetPassword', resetPassword);
 router.get('/referralCode', getReferralCode);
-
+router.get('/allUsers', protect, getAllUsers);
+router.get('/totalWalletBalance', protect, getTotalWalletBalance);
 module.exports = router;

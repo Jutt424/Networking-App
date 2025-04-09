@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { CheckCircle, XCircle, Search } from "lucide-react";
 import { paymentAPI } from "../../services/api";
+import { BiMoneyWithdraw } from "react-icons/bi";
 
 const WithdrawRequests = () => {
   const [requests, setRequests] = useState([]);
   const [search, setSearch] = useState("");
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     paymentAPI.getAllPayments()
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         setRequests(res.data.payments)
+        setTotal(res.data.total)
       })
       .catch(err => console.error(err));
   }, []);
@@ -33,7 +36,12 @@ const WithdrawRequests = () => {
 
   return (
     <div className="bg-gray-900 min-h-screen p-6 text-white">
-      <h2 className="text-2xl font-bold mb-4">Withdraw Requests</h2>
+      <div className="bg-gray-800 p-6 rounded-lg text-center shadow-lg max-w-md">
+        <BiMoneyWithdraw className="text-cyan-400 text-3xl mx-auto" />
+        <p className="text-xl font-bold mt-2 text-white">{total}</p>
+        <p className="text-gray-400">Total Withdrawals</p>
+      </div>
+      <h2 className="text-2xl font-bold mb-4 mt-8">Withdraw Requests</h2>
 
       {/* Search Bar */}
       <div className="relative mb-4">
@@ -74,22 +82,22 @@ const WithdrawRequests = () => {
                   day: "numeric",
                   year: "numeric",
                 })}</td>
-                <td className="p-2"> 
+                <td className="p-2">
                   <div className="flex gap-2">
                     <button
-                    className="bg-green-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-green-700"
-                    onClick={() => handleApprove(request._id)}
-                  >
-                  <CheckCircle className="w-4 h-4" /> Approve
-                </button>
-                  <button
-                    className="bg-red-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-red-700"
-                    onClick={() => handleReject(request._id)}
-                  >
-                    <XCircle className="w-4 h-4" /> Reject
-                  </button>
+                      className="bg-green-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-green-700"
+                      onClick={() => handleApprove(request._id)}
+                    >
+                      <CheckCircle className="w-4 h-4" /> Approve
+                    </button>
+                    <button
+                      className="bg-red-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-red-700"
+                      onClick={() => handleReject(request._id)}
+                    >
+                      <XCircle className="w-4 h-4" /> Reject
+                    </button>
                   </div>
-                  </td>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -62,6 +62,10 @@ export const userAPI = {
         API.put('/api/users/profile', userData),
     getReferralCode: () =>
         API.post('/api/referralCode'),
+    getAllUsers: () =>
+        API.get('/api/users/allUsers'),
+    getTotalWalletBalance: () =>
+        API.get('/api/users/totalWalletBalance'),
 };
 
 export const paymentAPI = {

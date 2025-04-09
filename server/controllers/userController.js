@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const sendEmail = require("../utils/sendEmail");
+const Wallet = require('../models/walletModel');
 require("dotenv").config()
 // Generate JWT
 const generateToken = (id) => {
@@ -14,7 +15,7 @@ const generateToken = (id) => {
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, referredBy } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please add all fields' });
@@ -22,28 +23,49 @@ const registerUser = async (req, res) => {
 
     // Check if user exists
     const userExists = await User.findOne({ email });
-
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Generate a unique referral code
-    const referralCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+    let referrer = null;
+
+    // If referral code is given, find referrer
+    if (referredBy) {
+      referrer = await User.findOne({ _id: referredBy });
+    }
 
     // Create user
     const user = await User.create({
       name,
       email,
       password,
-      referralCode, // Add referral code here
+      referredBy: referrer ? referredBy : null,
     });
+
+    // If referrer exists, update their wallet
+    if (referrer) {
+      await Wallet.updateOne(
+        { userId: referrer._id },
+        {
+          $inc: { wallet: 1.8 },
+          $setOnInsert: {
+            lastRecharge: new Date(),
+            lastWithdrawPaid: false
+          }
+        },
+        { upsert: true }
+      );
+    }
+    
+    // Create wallet for new user (with zero balance initially)
+    await Wallet.create({ userId: user._id });
 
     if (user) {
       res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
-        referralCode: user.referralCode, // Return referral code in response
+        referralCode: user.referralCode,
         token: generateToken(user._id),
       });
     } else {
@@ -54,6 +76,7 @@ const registerUser = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
 
 const getReferralCode = async (req, res) => {
   console.log(req);
@@ -200,6 +223,43 @@ const getMe = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+    const total = await User.countDocuments();
+
+    res.status(200).json({
+      totalUsers: total,
+      users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+const getTotalWalletBalance = async (req, res) => {
+  try {
+    const result = await Wallet.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalBalance: { $sum: "$wallet" }
+        }
+      }
+    ]);
+
+    const totalBalance = result[0]?.totalBalance || 0;
+
+    res.status(200).json({ totalWalletBalance: totalBalance });
+  } catch (error) {
+    console.error("Error calculating total wallet balance:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
 
 module.exports = {
   registerUser,
@@ -209,4 +269,6 @@ module.exports = {
   verifyOtp,
   resetPassword,
   getReferralCode,
+  getAllUsers,
+  getTotalWalletBalance
 };
