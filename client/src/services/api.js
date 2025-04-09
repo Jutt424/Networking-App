@@ -94,4 +94,11 @@ export const paymentAPI = {
     },
 }; 
 
+export const investmentAPI = {
+    investInPlan: (data) =>
+        API.post('/api/investment/invest', data),
+    getUserInvestments: (userId) =>
+        API.get(`/api/investment/getUserInvestments/${userId}`),
+};
+
 export default API;

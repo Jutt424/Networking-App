@@ -2,15 +2,15 @@ import React from "react";
 
 const InvestmentTable = () => {
   const data = [
-    { invest: "4k", dailyIncome: "100", tasks: "4/25 Per Task" },
-    { invest: "10k", dailyIncome: "300", tasks: "6/80 Per Task" },
-    { invest: "14k", dailyIncome: "480", tasks: "8/60 Per Task" },
-    { invest: "20k", dailyIncome: "550", tasks: "7/78 Per Task" },
-    { invest: "30k", dailyIncome: "720", tasks: "6/120 Per Task" },
-    { invest: "50k", dailyIncome: "1200", tasks: "6/200 Per Task" },
-    { invest: "75k", dailyIncome: "2350", tasks: "10/225 Per Task" },
-    { invest: "100k", dailyIncome: "2800", tasks: "8/350 Per Task" },
-    { invest: "180k", dailyIncome: "3500", tasks: "10/440 Per Task" },
+    { invest: "30", dailyIncome: "1.5", tasks: "4/25 Per Task" },
+    { invest: "100", dailyIncome: "300", tasks: "6/80 Per Task" },
+    { invest: "200", dailyIncome: "480", tasks: "8/60 Per Task" },
+    { invest: "300", dailyIncome: "550", tasks: "7/78 Per Task" },
+    { invest: "500", dailyIncome: "720", tasks: "6/120 Per Task" },
+    { invest: "1000", dailyIncome: "1200", tasks: "6/200 Per Task" },
+    { invest: "1800", dailyIncome: "2350", tasks: "10/225 Per Task" },
+    { invest: "5000", dailyIncome: "2800", tasks: "8/350 Per Task" },
+    { invest: "10000", dailyIncome: "3500", tasks: "10/440 Per Task" },
   ];
 
   return (

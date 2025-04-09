@@ -7,6 +7,7 @@ const { forgotPassword, verifyOtp, resetPassword, getReferralCode } = require('.
 const paymentRoutes = require('./routes/paymentRoutes');
 const rechargeRoutes = require('./routes/rechargeRoutes');
 const walletRoutes = require('./routes/walletRoutes');
+const investmentRoutes = require('./routes/investmentRoutes');
 const path = require('path');
 const { fileURLToPath } = require('url');
 dotenv.config();
@@ -16,6 +17,16 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    message: process.env.NODE_ENV === 'development' 
+      ? err.message 
+      : 'Something went wrong!' 
+  });
+});
+require('./cron/scheduler');
 
 // CORS configuration
 app.use(cors({
@@ -39,6 +50,7 @@ app.post('/api/referralCode', getReferralCode);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/recharge', rechargeRoutes);
 app.use('/api/wallet', walletRoutes);
+app.use('/api/investment', investmentRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 

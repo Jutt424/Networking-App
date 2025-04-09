@@ -5,7 +5,7 @@ import InvestmentPlan from "./InvestmentPlan";
 const LandingPage = () => {
   return (
     <div className="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-8">
-      <header className="w-full max-w-6xl flex justify-between items-center py-6">
+      <header className="w-full max-w-6xl flex justify-between md:flex-row flex-col items-center py-6 gap-4">
         <h1 className="text-4xl font-bold text-cyan-400">VIP Investment Platform</h1>
         <button className="bg-cyan-500 text-black px-6 py-2 rounded-md font-semibold hover:bg-cyan-400 transition">
           Get Started
