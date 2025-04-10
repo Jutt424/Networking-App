@@ -36,7 +36,9 @@ const getUserInvestments = async (req, res) => {
       const investments = await Investment.find({ userId }).populate('planId');
   
       // Extract coin names
-      const investedCoins = investments.map(inv => inv.planId.coin);
+      const investedCoins = investments
+      .filter(inv => inv.planId)
+      .map(inv => inv.planId.coin);
   
       res.json({ investedCoins });
     } catch (error) {

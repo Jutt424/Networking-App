@@ -11,8 +11,16 @@ import trump from "../../assets/trump.jpg";
 import pi500 from "../../assets/pi.jpg";
 import bnb from "../../assets/bnb.png";
 import xrp from "../../assets/xrp.png";
+import sui from "../../assets/sui.png";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { toast, ToastContainer } from "react-toastify";
+
+
+
 const logos = {
   XRP: xrp,
+  SUI: sui,
   Trump: trump,
   "Pi-200": pi500,
   Solana: solana,
@@ -27,6 +35,7 @@ const logos = {
 
 const seedPlans = [
   { coin: "XRP", investment: 30, dailyIncome: 1.5 },
+  { coin: "SUI", investment: 50, dailyIncome: 2.10 },
   { coin: "Trump", investment: 100, dailyIncome: 4.5 },
   { coin: "Pi-200", investment: 200, dailyIncome: 8.5 },
   { coin: "Solana", investment: 300, dailyIncome: 12.5 },
@@ -40,17 +49,22 @@ const seedPlans = [
 
 const InvestmentPlan = () => {
   const [investedCoins, setInvestedCoins] = useState([]);
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCoin, setSelectedCoin] = useState(null);
   const { user } = useContext(AuthContext);
   const userId = user._id;
 
-  const handleInvest = async (coin, userId) => {
+  const confirmInvest = async () => {
     try {
-      await investmentAPI.investInPlan({ coin, userId });
+      await investmentAPI.investInPlan({ coin: selectedCoin, userId });
+      setIsDialogOpen(false);
+      setSelectedCoin(null);
+      toast.success("Investment successful!");
     } catch (error) {
       console.error(error);
     }
   };
+
 
   useEffect(() => {
     const fetchInvestedCoins = async () => {
@@ -66,6 +80,7 @@ const InvestmentPlan = () => {
 
 
   return (
+    <>
     <div className="bg-gray-900 text-white flex items-center justify-center min-h-screen px-4">
       <motion.section
         initial={{ opacity: 0, y: -30 }}
@@ -73,6 +88,17 @@ const InvestmentPlan = () => {
         transition={{ duration: 0.8 }}
         className="text-center w-full max-w-6xl py-16"
       >
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
         <h2 className="text-4xl font-bold mb-10 text-cyan-400">Investment Plans</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {seedPlans.map((plan, index) => (
@@ -97,15 +123,19 @@ const InvestmentPlan = () => {
               </p>
               {investedCoins.includes(plan.coin) ? (
                 <span className="bg-green-600 text-white px-4 py-2 rounded font-bold cursor-default">
-                  ✅ Invested
-                </span>
+                  Invested
+                </span> 
               ) : (
                 <button
-                  onClick={() => handleInvest(plan.coin, userId)}
+                  onClick={() => {
+                    setSelectedCoin(plan.coin);
+                    setIsDialogOpen(true);
+                  }}
                   className="bg-cyan-500 hover:bg-cyan-400 px-4 py-2 rounded text-black font-bold"
                 >
                   Invest Now
                 </button>
+
               )}
 
             </div>
@@ -113,6 +143,64 @@ const InvestmentPlan = () => {
         </div>
       </motion.section>
     </div>
+    <Transition appear show={isDialogOpen} as={Fragment}>
+    <Dialog as="div" className="relative z-10" onClose={() => setIsDialogOpen(false)}>
+      <Transition.Child
+        as={Fragment}
+        enter="ease-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="ease-in duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="fixed inset-0 bg-black bg-opacity-25" />
+      </Transition.Child>
+  
+      <div className="fixed inset-0 overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                Confirm Investment
+              </Dialog.Title>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  Are you sure you want to invest in <span className="font-semibold">{selectedCoin}</span>?
+                </p>
+              </div>
+  
+              <div className="mt-4 flex justify-end space-x-2">
+                <button
+                  type="button"
+                  className="inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex justify-center rounded-md bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500"
+                  onClick={confirmInvest}
+                >
+                  Invest
+                </button>
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
+        </div>
+      </div>
+    </Dialog>
+  </Transition>
+  </>
   );
 };
 

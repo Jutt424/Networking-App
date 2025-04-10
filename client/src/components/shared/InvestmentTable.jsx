@@ -1,65 +1,75 @@
 import React from "react";
+import bitcoin from "../../assets/bitcoin.png";
+import eth from "../../assets/ethereum.png";
+import doge from "../../assets/doge.png";
+import trx from "../../assets/tron-trx.png";
+import solana from "../../assets/solana.png";
+import trump from "../../assets/trump.jpg";
+import pi500 from "../../assets/pi.jpg";
+import bnb from "../../assets/bnb.png";
+import xrp from "../../assets/xrp.png";
+import sui from "../../assets/sui.png";
+
+const logos = {
+  XRP: xrp,
+  SUI: sui,
+  Trump: trump,
+  "Pi-200": pi500,
+  Solana: solana,
+  "Pi-500": pi500,
+  BNB: bnb,
+  Doge: doge,
+  TRX: trx,
+  ETH: eth,
+  Bitcoin: bitcoin,
+};
+
+const seedPlans = [
+  { coin: "XRP", investment: 30, dailyIncome: 1.5, monthlyIncome: 45 },
+  { coin: "SUI", investment: 50, dailyIncome: 2.1, monthlyIncome: 63 },
+  { coin: "Trump", investment: 100, dailyIncome: 4.5, monthlyIncome: 135 },
+  { coin: "Pi-200", investment: 200, dailyIncome: 8.5, monthlyIncome: 255 },
+  { coin: "Solana", investment: 300, dailyIncome: 12.5, monthlyIncome: 375 },
+  { coin: "Pi-500", investment: 500, dailyIncome: 20, monthlyIncome: 600 },
+  { coin: "BNB", investment: 1000, dailyIncome: 40, monthlyIncome: 1200 },
+  { coin: "Doge", investment: 1800, dailyIncome: 70, monthlyIncome: 2100 },
+  { coin: "TRX", investment: 5000, dailyIncome: 200, monthlyIncome: 6000 },
+  { coin: "ETH", investment: 10000, dailyIncome: 380, monthlyIncome: 11400 },
+  { coin: "Bitcoin", investment: 20000, dailyIncome: 720, monthlyIncome: 21600 },
+];
+
 
 const InvestmentTable = () => {
-  const data = [
-    { invest: "30", dailyIncome: "1.5", tasks: "4/25 Per Task" },
-    { invest: "100", dailyIncome: "300", tasks: "6/80 Per Task" },
-    { invest: "200", dailyIncome: "480", tasks: "8/60 Per Task" },
-    { invest: "300", dailyIncome: "550", tasks: "7/78 Per Task" },
-    { invest: "500", dailyIncome: "720", tasks: "6/120 Per Task" },
-    { invest: "1000", dailyIncome: "1200", tasks: "6/200 Per Task" },
-    { invest: "1800", dailyIncome: "2350", tasks: "10/225 Per Task" },
-    { invest: "5000", dailyIncome: "2800", tasks: "8/350 Per Task" },
-    { invest: "10000", dailyIncome: "3500", tasks: "10/440 Per Task" },
-  ];
-
   return (
-    <div className="p-6 flex justify-center bg-gray-100 min-h-screen">
-      <div className="max-w-5xl w-full bg-white rounded-3xl shadow-lg overflow-hidden">
-        {/* Header */}
-        <div className="px-6 py-8 bg-gradient-to-r from-indigo-700 to-teal-500 text-white">
-          <h1 className="text-3xl font-bold text-center">Investment Dashboard</h1>
-          <p className="text-center mt-2 text-sm">
-            Discover the most rewarding investment plans tailored for you.
-          </p>
-        </div>
-
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto text-sm text-gray-700">
-            <thead className="bg-gray-200 text-gray-600 uppercase text-xs font-semibold">
-              <tr>
-                <th className="px-4 py-3 text-left">Investment</th>
-                <th className="px-4 py-3 text-left">Daily Income</th>
-                <th className="px-4 py-3 text-left">Tasks</th>
+    <div className="p-6 bg-[#0F172A] text-white">
+      <h2 className="text-2xl font-semibold mb-6 text-cyan-400">Available Investment Plans</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-cyan-900/60 text-cyan-200 text-sm uppercase tracking-wider">
+              <th className="p-3 text-left">Coin</th>
+              <th className="p-3 text-left">Investment ($)</th>
+              <th className="p-3 text-left">Daily Income ($)</th>
+              <th className="p-3 text-left">Monthy Income ($)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {seedPlans.map((plan, index) => (
+              <tr
+                key={index}
+                className="border-b border-cyan-800/30 hover:bg-cyan-800/20 transition duration-300"
+              >
+                <td className="p-3 flex items-center gap-3">
+                  <img src={logos[plan.coin]} alt={plan.coin} className="w-6 h-6 rounded-full" />
+                  <span>{plan.coin}</span>
+                </td>
+                <td className="p-3">${plan.investment}</td>
+                <td className="p-3 text-green-400 font-medium">${plan.dailyIncome}</td>
+                <td className="p-3 text-green-400 font-medium">${plan.monthlyIncome}</td>
               </tr>
-            </thead>
-            <tbody>
-              {data.map((row, index) => (
-                <tr
-                  key={index}
-                  className={`${
-                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                  } hover:bg-teal-50 transition-all`}
-                >
-                  <td className="px-6 py-4 text-gray-800 font-medium">{row.invest}</td>
-                  <td className="px-6 py-4">{row.dailyIncome}</td>
-                  <td className="px-6 py-4">{row.tasks}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-6 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
-            Last updated: <span className="font-semibold text-teal-600">2025</span>
-          </p>
-          <button className="px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow hover:bg-indigo-700 transition">
-            Learn More
-          </button>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

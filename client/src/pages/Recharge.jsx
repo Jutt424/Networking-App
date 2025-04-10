@@ -121,7 +121,7 @@ const handleFileChange = (e) => {
           </h3>
           <p className="mb-4">🔅 If you transfer the wrong amount, our company will not be responsible for the lost amount.</p>
           <p><span className="font-medium">Note:</span> Do not cancel the deposit order after the money has been transferred.</p>
-          <p className="font-bold text-xl mt-4">Bank Details:</p>
+          <p className="font-bold text-xl mt-4">Binance Address:</p>
           <div className="mt-4 space-y-3">
             {[
               { name: 'TRC 20', number: 'TPuAtywHNgDJkGTZqqaSQDBdeZTfJhRzFN' },

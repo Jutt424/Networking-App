@@ -3,6 +3,7 @@ const Plan = require('./Plan');
 
 const plans = [
   { coin: "XRP", investment: 30, dailyIncome: 1.5 },
+  { coin: "SUI", investment: 50, dailyIncome: 2.10 },
   { coin: "Trump", investment: 100, dailyIncome: 4.5 },
   { coin: "Pi-200", investment: 200, dailyIncome: 8.5 },
   { coin: "Solana", investment: 300, dailyIncome: 12.5 },

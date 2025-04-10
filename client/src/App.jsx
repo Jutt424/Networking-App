@@ -9,7 +9,7 @@ import Login from './auth/Login'
 import { AuthProvider, AuthContext } from './context/AuthContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import ForgotPassword from './auth/ForgotPassword'
 import OTPVerification from './auth/OTPVerification'
 import ResetPassword from './auth/ResetPassword'
@@ -20,6 +20,7 @@ import WithdrawRequests from './pages/Dashboard/WithdrawRequests'
 import DepositRequests from './pages/Dashboard/DepositRequests'
 import History from './pages/History'
 import { authAPI } from './services/api'
+import { Dialog, Transition } from '@headlessui/react'
 
 
 // Protected Route Component
@@ -53,24 +54,37 @@ const Layout = ({ children }) => {
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
+
   useEffect(() => {
-      const checkAuth = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-          try {
-            const response = await authAPI.getProfile();
-            setUser(response.data);
-            console.log(response.data);
-          } catch (error) {
-            console.error('Auth check failed:', error);
-            localStorage.removeItem('token');
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await authAPI.getProfile();
+          setUser(response.data);
+      
+          const isFirstLogin = sessionStorage.getItem('welcomeDialogShown');
+      
+          if (!isFirstLogin && response?.data) {
+            setShowWelcomeDialog(true);
+            sessionStorage.setItem('welcomeDialogShown', 'true');
           }
+      
+          console.log(response.data);
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          localStorage.removeItem('token');
         }
-        setLoading(false);
-      };
-      checkAuth();
-    }, []);
+      }
+      
+      setLoading(false);
+    };
+    checkAuth();
+  }, []);
+  
   return (
+    <>
     <Router>
       <AuthProvider>
           <Routes>
@@ -168,6 +182,66 @@ function App() {
       </AuthProvider>
       
     </Router>
+    <Transition appear show={showWelcomeDialog} as={Fragment}>
+    <Dialog as="div" className="relative z-50" onClose={() => setShowWelcomeDialog(false)}>
+      <Transition.Child
+        as={Fragment}
+        enter="ease-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="ease-in duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="fixed inset-0 bg-black bg-opacity-25" />
+      </Transition.Child>
+  
+      <div className="fixed inset-0 overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-gray-900 mb-2">
+                🚀 Introducing AutoCryptoInvest
+              </Dialog.Title>
+              <div className="mt-2">
+                <p className="text-sm text-gray-700 mb-2">
+                  Your Key to Guaranteed Daily Profits
+                </p>
+                <p className="text-sm text-gray-600">
+                  Are you tired of the volatility and uncertainty of cryptocurrency investments? Look no further than AutoCryptoInvest, the revolutionary new app that guarantees fixed daily profits, regardless of market fluctuations.
+                </p>
+                <ul className="list-disc ml-5 mt-3 text-gray-600 text-sm">
+                  <li><strong>Invest:</strong> Deposit your desired amount into the app, starting from as low as $30</li>
+                  <li><strong>Choose Your Plan:</strong> Select from our range of investment plans</li>
+                  <li><strong>Auto-Invest:</strong> Our algorithm will handle your crypto investments</li>
+                  <li><strong>Earn Daily:</strong> Receive fixed daily profits, no matter what</li>
+                </ul>
+              </div>
+  
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  className="inline-flex justify-center rounded-md bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500"
+                  onClick={() => setShowWelcomeDialog(false)}
+                >
+                  Got it!
+                </button>
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
+        </div>
+      </div>
+    </Dialog>
+  </Transition>
+  </>
   );
 }
 
