@@ -2,27 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { paymentAPI } from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 const History = () => {
-    const [pendingWithdrawals, setPendingWithdrawals] = useState([]);  
+    const [pendingWithdrawals, setPendingWithdrawals] = useState([]);
     const [pendingRecharges, setPendingRecharges] = useState([]);
     const { user } = useContext(AuthContext);
     // console.log(user);
     const token = localStorage.getItem('token');
     useEffect(() => {
-    if (token) {
-        const fetchPendingWithdrawals = async () => {
-            try {
-                const response = await paymentAPI.getPayments({ userId: user._id });
-                const data = await response.data;
-                console.log(data);
-                setPendingWithdrawals(data.payments || []);
-            } catch (error) {
-                console.error('Failed to fetch pending withdrawals', error);
-            }
-        };
-        fetchPendingWithdrawals();
-    }
+        if (token) {
+            const fetchPendingWithdrawals = async () => {
+                try {
+                    const response = await paymentAPI.getPayments({ userId: user._id });
+                    const data = await response.data;
+                    console.log(data);
+                    setPendingWithdrawals(data.payments || []);
+                } catch (error) {
+                    console.error('Failed to fetch pending withdrawals', error);
+                }
+            };
+            fetchPendingWithdrawals();
+        }
 
     }, [token]);
 
@@ -46,7 +47,17 @@ const History = () => {
         <main className="min-h-screen bg-gray-900 text-white p-6 pb-24">
             <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
                 <h2 className="text-xl font-bold text-white">Pending Withdrawals</h2>
-                
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
                 {pendingWithdrawals.length > 0 ? (
                     <ul className="mt-4 space-y-3">
                         {pendingWithdrawals.map((withdrawal, index) => (
@@ -75,7 +86,7 @@ const History = () => {
             </div>
             <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
                 <h2 className="text-xl font-bold text-white">Pending Recharges</h2>
-                
+
                 {pendingRecharges.length > 0 ? (
                     <ul className="mt-4 space-y-3">
                         {pendingRecharges.map((recharge, index) => (

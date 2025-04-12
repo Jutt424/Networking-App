@@ -5,13 +5,16 @@ import { paymentAPI } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 import uzairQR from "../assets/uzairQR.jpg";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Dialog } from "@headlessui/react";
 const Recharge = () => {
   const [amount, setAmount] = useState("");
   const [screenshot, setScreenshot] = useState(null);
   const [preview, setPreview] = useState(null); // Image preview ke liye
   const [loading, setLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { user } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
       .then(() => {
@@ -21,11 +24,11 @@ const Recharge = () => {
         toast.error("Failed to copy.");
       });
   };
-  
+
   const recharge = async () => {
     if (!amount || !screenshot) {
-        alert("Please enter an amount and upload a screenshot!");
-        return;
+      alert("Please enter an amount and upload a screenshot!");
+      return;
     }
 
     const formData = new FormData();
@@ -35,34 +38,37 @@ const Recharge = () => {
 
     // console.log("FormData Entries:");
     for (let pair of formData.entries()) {
-        // console.log(pair[0], pair[1]); // Yeh check karega ke screenshot aa raha hai ya nahi
+      // console.log(pair[0], pair[1]); // Yeh check karega ke screenshot aa raha hai ya nahi
     }
 
     try {
-        setLoading(true);
-        const response = await paymentAPI.recharge(formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        console.log("Recharge Successful:", response.data);
-        alert("Recharge request submitted successfully!");
+      setLoading(true);
+      const response = await paymentAPI.recharge(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      // console.log("Recharge Successful:", response.data);
+      setIsDialogOpen(true);
+      setTimeout(() => {
+        navigate("/history");
+      }, 2000);
     } catch (error) {
-        console.error("Recharge Error:", error);
-        alert("Something went wrong! Please try again.");
+      console.error("Recharge Error:", error);
+      toast.error("Something went wrong! Please try again.");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
-  if (file) {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
       console.log("Selected file:", file);
       setScreenshot(file);
       setPreview(URL.createObjectURL(file)); // Preview ke liye
-  }
-};
+    }
+  };
 
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center p-4">
@@ -106,8 +112,8 @@ const handleFileChange = (e) => {
             disabled={!amount || !screenshot || loading}
             onClick={recharge}
             className={`w-full py-2 mt-4 rounded-lg font-semibold transition-colors ${amount && screenshot
-                ? "bg-violet-600 hover:bg-violet-700"
-                : "bg-gray-500 cursor-not-allowed"
+              ? "bg-violet-600 hover:bg-violet-700"
+              : "bg-gray-500 cursor-not-allowed"
               }`}
           >
             {loading ? "Processing..." : "Deposit"}
@@ -127,18 +133,24 @@ const handleFileChange = (e) => {
               { name: 'TRC 20', number: 'TPuAtywHNgDJkGTZqqaSQDBdeZTfJhRzFN' },
             ].map((bank, index) => (
               <>
-              <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
-                <span className="text-md font-medium">{bank.name}: <span className="text-cyan-400 text-xs">{bank.number}</span></span>
-                <button onClick={() => copyToClipboard(bank.number)} className="text-cyan-400 hover:text-cyan-300">
-                  <FaCopy />
-                </button>
-              </div>
-              <img src={uzairQR} alt="" className="w-full" />
+                <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
+                  <span className="text-md font-medium">{bank.name}: <span className="text-cyan-400 text-xs">{bank.number}</span></span>
+                  <button onClick={() => copyToClipboard(bank.number)} className="text-cyan-400 hover:text-cyan-300">
+                    <FaCopy />
+                  </button>
+                </div>
+                <img src={uzairQR} alt="" className="w-full" />
               </>
             ))}
           </div>
         </div>
       </div>
+      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <Dialog.Panel className="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-96 text-center">
+          <Dialog.Title className="text-lg font-bold">Recharge Request Sent</Dialog.Title>
+          <p className="mt-2 text-gray-300">Your recharge request is in process and sent to the admin.</p>
+        </Dialog.Panel>
+      </Dialog>
     </div>
   );
 };

@@ -23,9 +23,9 @@ const LandingPage = () => {
       >
         <h2 className="text-5xl font-extrabold text-white mb-6">Invest in Crypto with Confidence</h2>
         <p className="text-lg text-gray-300 mb-8">Join the most trusted investment platform and grow your wealth with our exclusive VIP investment packages.</p>
-        <button className="bg-cyan-500 text-black px-8 py-3 rounded-md text-lg font-semibold hover:bg-cyan-400 transition">
+        <Link to="/tasks" className="bg-cyan-500 text-black px-8 py-3 rounded-md text-lg font-semibold hover:bg-cyan-400 transition">
           Explore Packages
-        </button>
+        </Link>
       </motion.section>
 
       {/* Live Profit Stats */}

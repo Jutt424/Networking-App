@@ -66,7 +66,7 @@ const Profile = () => {
         <div className="grid grid-cols-3 gap-4 mt-6">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
             <FaWallet className="text-cyan-400 text-2xl mx-auto" />
-            <p className="text-lg font-bold mt-2">{wallet?.balance || 0}</p>
+            <p className="text-lg font-bold mt-2">{wallet?.balance || 0} $</p>
             <p className="text-gray-400 text-sm">Wallet Balance</p>
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center justify-center flex flex-col items-center gap-2">

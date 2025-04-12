@@ -9,9 +9,9 @@ export default function Topbar() {
         <nav className="flex justify-between items-center">
           {/* Left side */}
           <div className="flex items-center space-x-4">
-            <span className="text-lg md:text-xl font-bold text-cyan-400">
+            <Link to="/" className="text-lg md:text-xl font-bold text-cyan-400 cursor-pointer">
               EASY TRADE
-            </span>
+            </Link>
           </div>
 
           {/* Right side */}

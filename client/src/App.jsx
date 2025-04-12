@@ -64,14 +64,14 @@ function App() {
           const response = await authAPI.getProfile();
           setUser(response.data);
       
-          const isFirstLogin = sessionStorage.getItem('welcomeDialogShown');
+          // const isFirstLogin = sessionStorage.getItem('welcomeDialogShown');
       
-          if (!isFirstLogin && response?.data) {
-            setShowWelcomeDialog(true);
-            sessionStorage.setItem('welcomeDialogShown', 'true');
-          }
+          // if (!isFirstLogin && response?.data) {
+          //   setShowWelcomeDialog(true);
+          //   sessionStorage.setItem('welcomeDialogShown', 'true');
+          // }
       
-          console.log(response.data);
+          // console.log(response.data);
         } catch (error) {
           console.error('Auth check failed:', error);
           localStorage.removeItem('token');
