@@ -36,7 +36,7 @@ const Profile = () => {
         toast.error("Failed to copy referral link.");
       });
   };
-  
+
 
   return (
     <main className="min-h-screen bg-gray-900 text-white p-6 pb-24">
@@ -97,6 +97,20 @@ const Profile = () => {
             </button>
 
           </div>
+        </div>
+        <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold text-white">About App</h2>
+          <p className="text-gray-400 mt-2">This app is a platform for users to earn rewards by inviting their friends and family.</p>
+            <p className="">
+              Introducing EazyTrade ( VIP Investment Platform ): Your Key to Guaranteed Daily Profits
+              Are you tired of the volatility and uncertainty of cryptocurrency investments? Look no further than EazyTrade, the revolutionary new app that guarantees fixed daily profits, regardless of market fluctuations.
+
+              How it Works
+              1. Invest: Deposit your desired amount into the app, starting from as low as 30$
+              2. Choose Your Plan: Select from our range of investment plans, each offering a fixed daily profit percentage.
+              3. Auto-Invest: Our advanced algorithm will automatically invest your funds in a diversified portfolio of cryptocurrencies.
+              4. Earn Daily Profits: Receive your fixed daily profits, guaranteed and unaffected by market volatility.
+            </p>
         </div>
       </div>
     </main>

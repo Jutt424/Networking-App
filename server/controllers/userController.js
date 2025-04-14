@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
       await Wallet.updateOne(
         { userId: referrer._id },
         {
-          $inc: { wallet: 1.8 },
+          $inc: { wallet: 2 },
           $setOnInsert: {
             lastRecharge: new Date(),
             lastWithdrawPaid: false

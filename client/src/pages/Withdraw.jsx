@@ -37,10 +37,10 @@ const Withdraw = () => {
       <div className="bg-gray-900 p-4 max-w-lg mx-auto space-y-6 text-white">
         <div className="bg-gray-800 shadow-lg rounded-2xl p-6">
           <h2 className="text-xl font-bold mb-4 text-center">Withdraw</h2>
-          <p className="text-xl font-bold mb-4 text-center">Minimum withdraw amount 1500</p>
+          <p className="text-xl font-bold mb-4 text-center">Minimum withdraw amount 15 $</p>
 
           <div className="space-y-3 mb-4">
-            {["JazzCash", "EasyPaisa", "Bank"].map((method) => (
+            {["TRC 20"].map((method) => (
               <label key={method} className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
@@ -58,7 +58,7 @@ const Withdraw = () => {
           {selectedMethod && (
             <input
               type="text"
-              placeholder="Enter your account number"
+              placeholder="Enter your USDT Wallet Address (TRC 20)"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring focus:ring-cyan-500 focus:outline-none"
@@ -80,7 +80,7 @@ const Withdraw = () => {
           <div className="mt-4">
             <input
               type="number"
-              placeholder="Enter withdraw amount"
+              placeholder="Enter 15-10000 $"
               value={withdrawAmount}
               onChange={(e) => setWithdrawAmount(e.target.value)}
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring focus:ring-cyan-500 focus:outline-none"

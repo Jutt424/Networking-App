@@ -12,6 +12,7 @@ import pi500 from "../../assets/pi.jpg";
 import bnb from "../../assets/bnb.png";
 import xrp from "../../assets/xrp.png";
 import sui from "../../assets/sui.png";
+import dot from "../../assets/dot.png";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -22,9 +23,9 @@ const logos = {
   XRP: xrp,
   SUI: sui,
   Trump: trump,
-  "Pi-200": pi500,
+  "Pi": pi500,
   Solana: solana,
-  "Pi-500": pi500,
+  "dot": dot,
   BNB: bnb,
   Doge: doge,
   TRX: trx,
@@ -37,9 +38,9 @@ const seedPlans = [
   { coin: "XRP", investment: 30, dailyIncome: 1.5 },
   { coin: "SUI", investment: 50, dailyIncome: 2.10 },
   { coin: "Trump", investment: 100, dailyIncome: 4.5 },
-  { coin: "Pi-200", investment: 200, dailyIncome: 8.5 },
+  { coin: "Pi", investment: 200, dailyIncome: 8.5 },
   { coin: "Solana", investment: 300, dailyIncome: 12.5 },
-  { coin: "Pi-500", investment: 500, dailyIncome: 20 },
+  { coin: "dot", investment: 500, dailyIncome: 20 },
   { coin: "BNB", investment: 1000, dailyIncome: 40 },
   { coin: "Doge", investment: 1800, dailyIncome: 70 },
   { coin: "TRX", investment: 5000, dailyIncome: 200 },
@@ -61,10 +62,9 @@ const InvestmentPlan = () => {
       setSelectedCoin(null);
       toast.success("Investment successful!");
     } catch (error) {
-      console.error(error);
+      toast.error("Insufficient balance, Please Recharge");
     }
   };
-
 
   useEffect(() => {
     const fetchInvestedCoins = async () => {

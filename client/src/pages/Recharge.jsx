@@ -131,6 +131,7 @@ const Recharge = () => {
           <div className="mt-4 space-y-3">
             {[
               { name: 'TRC 20', number: 'TPuAtywHNgDJkGTZqqaSQDBdeZTfJhRzFN' },
+              { name: 'TRC 20', number: 'TYiNMxjF6NzykpEt3iVRRJXTZS6S4t2DBh' },
             ].map((bank, index) => (
               <>
                 <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
@@ -139,7 +140,7 @@ const Recharge = () => {
                     <FaCopy />
                   </button>
                 </div>
-                <img src={uzairQR} alt="" className="w-full" />
+                {/* <img src={uzairQR} alt="" className="w-full" /> */}
               </>
             ))}
           </div>
