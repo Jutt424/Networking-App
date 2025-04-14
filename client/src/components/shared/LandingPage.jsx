@@ -36,7 +36,7 @@ const LandingPage = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="bg-gray-800 p-6 rounded-lg shadow-lg"
         >
-          <h3 className="text-3xl font-bold text-cyan-400">$10M+</h3>
+          <h3 className="text-3xl font-bold text-cyan-400">$1M+</h3>
           <p className="text-gray-300 mt-2">Total Investments</p>
         </motion.div>
         <motion.div 
@@ -54,7 +54,7 @@ const LandingPage = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="bg-gray-800 p-6 rounded-lg shadow-lg"
         >
-          <h3 className="text-3xl font-bold text-cyan-400">$2M+</h3>
+          <h3 className="text-3xl font-bold text-cyan-400">$700K+</h3>
           <p className="text-gray-300 mt-2">Withdrawn Profits</p>
         </motion.div>
       </section>

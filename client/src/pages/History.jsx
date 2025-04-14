@@ -63,7 +63,7 @@ const History = () => {
                         {pendingWithdrawals.map((withdrawal, index) => (
                             <li key={index} className="bg-gray-700 p-3 rounded-lg flex justify-between">
                                 <div>
-                                    <p className="font-semibold text-white">Rs: {withdrawal.amount}</p>
+                                    <p className="font-semibold text-white">$: {withdrawal.amount}</p>
                                     <p className="text-gray-400 text-sm">Method: {withdrawal.paymentMethod}</p>
 
                                     {/* ✅ Bank Name Only if Payment Method is Bank Account */}
@@ -92,7 +92,7 @@ const History = () => {
                         {pendingRecharges.map((recharge, index) => (
                             <li key={index} className="bg-gray-700 p-3 rounded-lg flex justify-between">
                                 <div>
-                                    <p className="font-semibold text-white">Rs: {recharge.amount}</p>
+                                    <p className="font-semibold text-white">$: {recharge.amount}</p>
 
                                     {/* ✅ Bank Name Only if Payment Method is Bank Account */}
                                     {recharge.paymentMethod === "Bank" && (
