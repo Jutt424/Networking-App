@@ -58,6 +58,7 @@ const InvestmentPlan = () => {
   const confirmInvest = async () => {
     try {
       await investmentAPI.investInPlan({ coin: selectedCoin, userId });
+      setInvestedCoins(prev => [...prev, selectedCoin]);
       setIsDialogOpen(false);
       setSelectedCoin(null);
       toast.success("Investment successful!");

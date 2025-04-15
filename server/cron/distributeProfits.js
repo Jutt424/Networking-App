@@ -18,7 +18,7 @@ const distributeProfits = async () => {
         wallet.wallet += investment.profitPerDay;
         await wallet.save();
 
-        investment.nextProfitTime = new Date(now.getTime() + 24 * 60 * 60 * 1000); // ✅ back to 24 hours
+        investment.nextProfitTime = new Date(now.getTime() + 1 * 60 * 1000); // ✅ next run after 1 minute
 
         await investment.save();
 
