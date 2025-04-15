@@ -25,11 +25,10 @@ const DepositRequests = () => {
     }
   }, [token]);
 
-  const updateStatus = (id, status, fetchDeposits) => {
+  const updateStatus = (id, status) => {
     paymentAPI.updateRechargeStatus(id, status)
       .then(() => {
         setDeposits(deposits.map(deposit => deposit.id === id ? { ...deposit, status } : deposit));
-        fetchDeposits();
 
       })
       .catch(err => console.error(err));
