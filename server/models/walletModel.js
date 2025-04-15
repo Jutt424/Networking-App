@@ -9,6 +9,7 @@ const walletSchema = new mongoose.Schema({
   lastWithdraw: { type: Date, default: new Date() },
   lastRecharge: { type: Date, default: new Date() },
   lastWithdrawPaid: { type: Boolean, default: false },
+  firstRechargeDone: { type: Boolean, default: false }
 
 }, { timestamps: true });
 

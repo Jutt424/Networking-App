@@ -1,5 +1,6 @@
 const Recharge = require('../models/rechargeModal.js');
 const Wallet = require('../models/walletModel.js');
+const User = require('../models/userModel.js');
 const recharge = async (req, res) => {
     try {
         const { amount } = req.body;
@@ -64,23 +65,39 @@ const recharge = async (req, res) => {
   
         const updatedRecharge = await Recharge.findByIdAndUpdate(id, { status }, { new: true });
         if (status === 'approved') {
-            let wallet = await Wallet.findOne({ userId: updatedRecharge.userId });
-      
-            if (wallet) {
-              // Update existing wallet
-              wallet.wallet += updatedRecharge.amount;
-              wallet.lastRecharge = new Date().toISOString();
-            } else {
-                // Create new wallet with recharge amount
-                wallet = new Wallet({
-                    userId: updatedRecharge.userId,
-                    wallet: updatedRecharge.amount,
-                    lastRecharge: new Date().toISOString(),
-                    lastWithdrawPaid: false
-                });
-            }
-            await wallet.save();
+          let wallet = await Wallet.findOne({ userId: updatedRecharge.userId });
+        
+          if (wallet) {
+            // Add recharge amount
+            wallet.wallet += updatedRecharge.amount;
+            wallet.lastRecharge = new Date().toISOString();
+          } else {
+            // First-time wallet create
+            wallet = new Wallet({
+              userId: updatedRecharge.userId,
+              wallet: updatedRecharge.amount,
+              lastRecharge: new Date().toISOString(),
+              lastWithdrawPaid: false,
+            });
+          }
+        
+          // 🟢 Now handle referral commission on first recharge
+          const user = await User.findById(updatedRecharge.userId);
+          if (user?.referredBy && !wallet.firstRechargeDone) {
+            // ✅ Mark first recharge done
+            wallet.firstRechargeDone = true;
+        
+            // ✅ Add $2 to referrer wallet
+            await Wallet.updateOne(
+              { userId: user.referredBy },
+              { $inc: { wallet: 2 } },
+              { upsert: true }
+            );
+          }
+        
+          await wallet.save();
         }
+        
         if (!updatedRecharge) {
             return res.status(404).json({ message: 'Recharge not found' });
         }

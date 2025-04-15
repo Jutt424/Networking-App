@@ -11,7 +11,7 @@ const WithdrawRequests = () => {
   useEffect(() => {
     paymentAPI.getAllPayments()
       .then(res => {
-        // console.log(res.data);
+        console.log(res.data);
         setRequests(res.data.payments)
         setTotal(res.data.total)
       })
@@ -83,20 +83,24 @@ const WithdrawRequests = () => {
                   year: "numeric",
                 })}</td>
                 <td className="p-2">
-                  <div className="flex gap-2">
-                    <button
-                      className="bg-green-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-green-700"
-                      onClick={() => handleApprove(request._id)}
-                    >
-                      <CheckCircle className="w-4 h-4" /> Approve
-                    </button>
-                    <button
-                      className="bg-red-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-red-700"
-                      onClick={() => handleReject(request._id)}
-                    >
-                      <XCircle className="w-4 h-4" /> Reject
-                    </button>
-                  </div>
+                  {request.status === "pending" ? (
+                    <div className="flex gap-2">
+                      <button
+                        className="bg-green-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-green-700"
+                        onClick={() => handleApprove(request._id)}
+                      >
+                        <CheckCircle className="w-4 h-4" /> Approve
+                      </button>
+                      <button
+                        className="bg-red-600 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-red-700"
+                        onClick={() => handleReject(request._id)}
+                      >
+                        <XCircle className="w-4 h-4" /> Reject
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="italic text-sm text-gray-400">Processed</span>
+                  )}
                 </td>
               </tr>
             ))}
