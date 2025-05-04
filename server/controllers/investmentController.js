@@ -22,7 +22,7 @@ const investInPlan = async (req, res) => {
     planId: plan._id,
     amount: plan.investment,
     profitPerDay: plan.dailyIncome,
-    nextProfitTime: new Date(Date.now() + 1 * 60 * 1000) // ✅ 1 minute
+    nextProfitTime: new Date(Date.now() + 24 * 60 * 60 * 1000) // ✅ 1 minute
 
   });
 
