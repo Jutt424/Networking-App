@@ -15,7 +15,17 @@ const plans = [
   { coin: "Bitcoin", investment: 20000, dailyIncome: 720 }
 ];
 
-mongoose.connect('mongodb://localhost:27017/rg_db')
+// mongoose.connect('mongodb://localhost:27017/rg_db')
+//   .then(async () => {
+//     await Plan.deleteMany(); // Clear previous
+//     await Plan.insertMany(plans);
+//     console.log("✅ Plans inserted!");
+//     process.exit();
+//   })
+//   .catch(err => console.log("❌ Error:", err));
+
+
+mongoose.connect('mongodb+srv://lowkey_jutt:nLxJRCgvJOytMe4F@easytrade.hybbseb.mongodb.net/rg_db?retryWrites=true&w=majority&appName=EasyTrade')
   .then(async () => {
     await Plan.deleteMany(); // Clear previous
     await Plan.insertMany(plans);
