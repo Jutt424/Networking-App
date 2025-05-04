@@ -2,8 +2,8 @@
 const cron = require('node-cron');
 const distributeProfits = require('./distributeProfits');
 
-// Run every minute (for testing purposes)
-cron.schedule('* * * * *', async () => {
-  console.log("⏰ Running profit job every minute (for testing)");
+// Run once every day at 12:00 AM
+cron.schedule('0 0 * * *', async () => {
+  console.log("⏰ Running profit job daily at 12:00 AM");
   await distributeProfits();
 });
