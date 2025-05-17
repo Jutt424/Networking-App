@@ -56,7 +56,6 @@ const registerUser = async (req, res) => {
 
 
 const getReferralCode = async (req, res) => {
-  console.log(req);
   try {
     if (!req.body.email) {
       return res.status(401).json({ message: "Not authorized, user not found in request" });

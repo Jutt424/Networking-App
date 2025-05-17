@@ -69,6 +69,7 @@ const WithdrawRequests = () => {
               <th className="p-2 whitespace-nowrap">User</th>
               <th className="p-2 whitespace-nowrap">Amount</th>
               <th className="p-2 whitespace-nowrap">Method</th>
+              <th className="p-2 whitespace-nowrap">Account Number</th>
               <th className="p-2 whitespace-nowrap">Status</th>
               <th className="p-2 whitespace-nowrap">Created At</th>
               <th className="p-2 whitespace-nowrap">Action</th>
@@ -80,6 +81,7 @@ const WithdrawRequests = () => {
                 <td className="p-2">{request.userId.name}</td>
                 <td className="p-2">{request.amount}</td>
                 <td className="p-2">{request.paymentMethod}</td>
+                <td className="p-2">{request.accountNumber}</td>
                 <td className={`p-2 font-semibold ${request.status === "rejected"
                   ? "text-red-400"
                   : request.status === "approved"

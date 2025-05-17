@@ -122,13 +122,7 @@ const Recharge = () => {
 
         {/* Recharge Instructions */}
         <div className="bg-gray-800 shadow-lg rounded-2xl p-6 text-white">
-          <h3 className="text-lg font-bold mb-3 flex items-center">
-            <BookCopy className="w-6 h-6 mr-2 text-violet-500" />Recharge Instructions
-          </h3>
-          <p className="mb-4">🔅 If you transfer the wrong amount, our company will not be responsible for the lost amount.</p>
-          <p><span className="font-medium">Note:</span> Do not cancel the deposit order after the money has been transferred.</p>
-          <p className="font-bold text-xl mt-4">Binance Address:</p>
-          <div className="mt-4 space-y-3">
+          <div className="mb-4 space-y-3">
             {[
               { name: 'TRC 20', number: 'TPuAtywHNgDJkGTZqqaSQDBdeZTfJhRzFN' },
               { name: 'TRC 20', number: 'TYiNMxjF6NzykpEt3iVRRJXTZS6S4t2DBh' },
@@ -144,6 +138,13 @@ const Recharge = () => {
               </>
             ))}
           </div>
+          <h3 className="text-lg font-bold mb-3 flex items-center">
+            <BookCopy className="w-6 h-6 mr-2 text-violet-500" />Recharge Instructions
+          </h3>
+          <p className="mb-4">🔅 If you transfer the wrong amount, our company will not be responsible for the lost amount.</p>
+          <p><span className="font-medium">Note:</span> Do not cancel the deposit order after the money has been transferred.</p>
+          {/* <p className="font-bold text-xl mt-4">Binance Address:</p> */}
+
         </div>
       </div>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

@@ -24,7 +24,7 @@ const plans = [
 //   })
 //   .catch(err => console.log("❌ Error:", err));
 
-
+//bc global variable ni bna skta
 mongoose.connect('mongodb+srv://lowkey_jutt:nLxJRCgvJOytMe4F@easytrade.hybbseb.mongodb.net/rg_db?retryWrites=true&w=majority&appName=EasyTrade')
   .then(async () => {
     await Plan.deleteMany(); // Clear previous

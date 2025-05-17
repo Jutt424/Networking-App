@@ -64,7 +64,6 @@ const Signup = () => {
     if (validate()) {
       setLoading(true);
       try {
-        debugger
         const params = new URLSearchParams(window.location.search);
         const ref = params.get("ref");
         setFormData((prev) => ({ ...prev, referredBy: ref }));

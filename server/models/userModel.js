@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema(
     },
     referralCode: {
       type: String,
-      unique: true, // Ensure the referral code is unique
+      default: null,
     },
     referredBy: {
       type: String, // Store the referral code of the referrer
