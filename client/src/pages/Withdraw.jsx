@@ -5,6 +5,7 @@ import { Dialog } from "@headlessui/react";
 import { paymentAPI } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const Withdraw = () => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
@@ -16,6 +17,16 @@ const Withdraw = () => {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const handleWithdraw = () => {
+    if (!withdrawAmount || !selectedMethod || !accountNumber) {
+      toast.error("Please fill all the required fields!");
+      return;
+    }
+    
+    if (parseFloat(withdrawAmount) < 15) {
+      toast.error("Minimum withdrawal amount is $15.");
+      return;
+    }
+    
   if(token){
     const data = {
       userId: user._id,
@@ -38,7 +49,17 @@ const Withdraw = () => {
         <div className="bg-gray-800 shadow-lg rounded-2xl p-6">
           <h2 className="text-xl font-bold mb-4 text-center">Withdraw</h2>
           <p className="text-xl font-bold mb-4 text-center">Minimum withdraw amount 15 $</p>
-
+          <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          />
           <div className="space-y-3 mb-4">
             {["TRC 20"].map((method) => (
               <label key={method} className="flex items-center gap-2 cursor-pointer">
@@ -103,7 +124,7 @@ const Withdraw = () => {
         <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <Dialog.Panel className="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-96 text-center">
             <Dialog.Title className="text-lg font-bold">Withdrawal Request Sent</Dialog.Title>
-            <p className="mt-2 text-gray-300">Your withdrawal request is in process and sent to the admin.</p>
+            <p className="mt-2 text-gray-300">Your withdrawal request is in process</p>
           </Dialog.Panel>
         </Dialog>
       </div>

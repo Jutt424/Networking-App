@@ -27,7 +27,8 @@ const Profile = () => {
     fetchWallet();
   }, [user._id]);
   const handleCopy = () => {
-    const referralLink = `http://localhost:5173/auth/signup?ref=${user._id}`;
+    // const referralLink = `http://localhost:5173/auth/signup?ref=${user._id}`;
+    const referralLink = `https://eazytrade.xyz/auth/signup?ref=${user._id}`;
     navigator.clipboard.writeText(referralLink)
       .then(() => {
         toast.success("Referral link copied to clipboard!");
@@ -100,7 +101,8 @@ const Profile = () => {
           {/* Make this section responsive */}
           <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gray-700 p-3 rounded-lg">
             <span className="text-cyan-400 font-mono break-all text-sm sm:text-base">
-              {`http://localhost:5173/auth/signup?ref=${user._id}` || 'Generating...'}
+              {/* {`http://localhost:5173/auth/signup?ref=${user._id}` || 'Generating...'} */}
+              {`https://eazytrade.xyz/auth/signup?ref=${user._id}` || 'Generating...'}
             </span>
 
             <button

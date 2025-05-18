@@ -42,7 +42,7 @@ const seedPlans = [
 const InvestmentTable = () => {
   return (
     <div className="p-6 bg-[#0F172A] text-white">
-      <h2 className="text-2xl font-semibold mb-6 text-cyan-400">Available Investment Plans</h2>
+      <h2 className="text-xl font-semibold mb-6 text-cyan-400">Available Investment Plans</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border-collapse">
           <thead>

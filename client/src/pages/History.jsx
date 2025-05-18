@@ -84,7 +84,7 @@ const History = () => {
                     <p className="text-gray-400 mt-2">No pending withdrawals.</p>
                 )}
             </div>
-            <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+            <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto mb-20">
                 <h2 className="text-xl font-bold text-white">Pending Recharges</h2>
 
                 {pendingRecharges.length > 0 ? (

@@ -27,9 +27,15 @@ const Recharge = () => {
 
   const recharge = async () => {
     if (!amount || !screenshot) {
-      alert("Please enter an amount and upload a screenshot!");
+      toast.error("Please enter an amount and upload a screenshot!");
       return;
     }
+    
+    if (parseFloat(amount) < 30) {
+      toast.error("Minimum deposit amount is $30.");
+      return;
+    }
+    
 
     const formData = new FormData();
     formData.append("userId", user._id);
@@ -71,7 +77,7 @@ const Recharge = () => {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div className="bg-gray-900 min-h-screen flex items-center justify-center p-4 mb-12">
       <div className="w-full max-w-lg space-y-6">
         {/* Deposit Section */}
         <ToastContainer
@@ -89,9 +95,15 @@ const Recharge = () => {
           <h2 className="text-xl font-bold text-center mb-4">Deposit Amount</h2>
           <input
             type="number"
-            placeholder="Enter the amount"
+            placeholder="Enter the amount (minimum 30 $)"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            min={30}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val === "" || parseFloat(val) >= 0) {
+                setAmount(val);
+              }
+            }}            
             className="w-full border border-gray-600 bg-gray-700 rounded-lg px-4 py-2 focus:ring focus:ring-violet-500 focus:outline-none text-white"
           />
           <div className="mt-4">
@@ -150,7 +162,7 @@ const Recharge = () => {
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <Dialog.Panel className="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-96 text-center">
           <Dialog.Title className="text-lg font-bold">Recharge Request Sent</Dialog.Title>
-          <p className="mt-2 text-gray-300">Your recharge request is in process and sent to the admin.</p>
+          <p className="mt-2 text-gray-300">Your recharge request is in process</p>
         </Dialog.Panel>
       </Dialog>
     </div>

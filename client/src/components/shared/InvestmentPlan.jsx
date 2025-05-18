@@ -101,7 +101,7 @@ const InvestmentPlan = () => {
           theme="dark"
         />
         <h2 className="text-4xl font-bold mb-10 text-cyan-400">Investment Plans</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           {seedPlans.map((plan, index) => (
             <div
               key={index}
