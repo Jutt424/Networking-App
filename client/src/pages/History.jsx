@@ -61,7 +61,7 @@ const History = () => {
                 {pendingWithdrawals.length > 0 ? (
                     <ul className="mt-4 space-y-3">
                         {pendingWithdrawals.map((withdrawal, index) => (
-                            <li key={index} className="bg-gray-700 p-3 rounded-lg flex justify-between">
+                            <li key={index} className="bg-gray-700 p-3 rounded-lg flex flex-col md:justify-between">
                                 <div>
                                     <p className="font-semibold text-white">$: {withdrawal.amount}</p>
                                     <p className="text-gray-400 text-sm">Method: {withdrawal.paymentMethod}</p>
@@ -90,7 +90,7 @@ const History = () => {
                 {pendingRecharges.length > 0 ? (
                     <ul className="mt-4 space-y-3">
                         {pendingRecharges.map((recharge, index) => (
-                            <li key={index} className="bg-gray-700 p-3 rounded-lg flex justify-between">
+                            <li key={index} className="bg-gray-700 p-3 rounded-lg flex-col md:justify-between">
                                 <div>
                                     <p className="font-semibold text-white">$: {recharge.amount}</p>
 
