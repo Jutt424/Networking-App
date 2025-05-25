@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BookCopy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
@@ -6,16 +6,30 @@ import { paymentAPI } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
-
 const Withdraw = () => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [bankName, setBankName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [wallet, setWallet] = useState(null);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    const fetchWallet = async () => {
+      try {
+        const response = await paymentAPI.wallet.getUserWallet(user._id);
+        console.log(response);
+        setWallet(response.data);
+      } catch (error) {
+        console.error('Error fetching wallet:', error);
+      }
+    };
+    fetchWallet();
+  }, [user._id]);
+
   const handleWithdraw = () => {
     if (!withdrawAmount || !selectedMethod || !accountNumber) {
       toast.error("Please fill all the required fields!");
@@ -35,6 +49,10 @@ const Withdraw = () => {
       amount: withdrawAmount,
       bankName: selectedMethod === "Bank" ? bankName : null
     };
+    if (!wallet || wallet.balance < parseFloat(withdrawAmount)) {
+      toast.error("Insufficient wallet balance.");
+      return;
+    }
     paymentAPI.withdraw(data);
     setIsDialogOpen(true);
     setTimeout(() => {

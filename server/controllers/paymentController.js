@@ -9,6 +9,15 @@ const withdraw = async (req, res) => {
       return res.status(400).json({ message: 'Bank name is required for bank payments.' });
     }
 
+    const wallet = await Wallet.findOne({ userId });
+    if (!wallet) {
+      return res.status(404).json({ message: 'Wallet not found.' });
+    }
+
+    if (wallet.wallet < amount) {
+      return res.status(400).json({ message: 'Insufficient wallet balance.' });
+    }
+
     const payment = new Payment({
       userId: userId,
       paymentMethod,
