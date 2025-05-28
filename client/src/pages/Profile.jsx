@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { FaCopy, FaWallet, } from 'react-icons/fa';
 import { PiHandDepositFill } from "react-icons/pi";
 import { BiMoneyWithdraw } from "react-icons/bi";
-import { paymentAPI } from '../services/api';
+import { paymentAPI, userAPI } from '../services/api';
 import { toast, ToastContainer } from 'react-toastify';
+import ReferredUsersTable from '../components/ReferredUsersTable';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [referralCode, setReferralCode] = useState('');
   const [wallet, setWallet] = useState(null);
+  const [referredUsers, setReferredUsers] = useState([]);
   const navigate = useNavigate();
   const getInitial = (name) => name ? name.charAt(0).toUpperCase() : '?';
 
@@ -18,7 +20,7 @@ const Profile = () => {
     const fetchWallet = async () => {
       try {
         const response = await paymentAPI.wallet.getUserWallet(user._id);
-        console.log(response);
+        // console.log(response);
         setWallet(response.data);
       } catch (error) {
         console.error('Error fetching wallet:', error);
@@ -38,6 +40,18 @@ const Profile = () => {
       });
   };
 
+  useEffect(() => {
+    const fetchReferredUsers = async () => {
+      try {
+        const response = await userAPI.getReferredUsers(user._id);
+        console.log(response);
+        setReferredUsers(response.data.referredUsers || []);
+      } catch (error) {
+        console.error('Error fetching referred users:', error);
+      }
+    };
+    fetchReferredUsers();
+  }, [user._id]);
 
   return (
     <main className="min-h-screen bg-gray-900 text-white p-6 pb-24">
@@ -113,7 +127,7 @@ const Profile = () => {
             </button>
           </div>
         </div>
-
+        <ReferredUsersTable users={referredUsers} />
         <div className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-bold text-white">About App</h2>
           <p className="text-gray-400 mt-2">This app is a platform for users to earn rewards by inviting their friends and family.</p>

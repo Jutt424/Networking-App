@@ -66,6 +66,8 @@ export const userAPI = {
         API.get('/api/users/allUsers'),
     getTotalWalletBalance: () =>
         API.get('/api/users/totalWalletBalance'),
+    getReferredUsers: (userId) =>
+        API.get(`/api/users/getReferredUsers/${userId}`),
 };
 
 export const paymentAPI = {

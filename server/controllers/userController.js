@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const sendEmail = require("../utils/sendEmail");
 const Wallet = require('../models/walletModel');
+const Recharge = require('../models/rechargeModal');
+const mongoose = require('mongoose');
 require("dotenv").config()
 // Generate JWT
 const generateToken = (id) => {
@@ -214,8 +216,6 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-
-
 const getTotalWalletBalance = async (req, res) => {
   try {
     const result = await Wallet.aggregate([
@@ -236,6 +236,43 @@ const getTotalWalletBalance = async (req, res) => {
   }
 };
 
+const getReferredUsers = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const referredUsers = await User.find({
+      $or: [
+        { referredBy: userId },             // handles string match
+        { referredBy: new mongoose.Types.ObjectId(userId) } // handles ObjectId match
+      ]
+    }).select("-password");
+
+    const usersWithDepositStatus = await Promise.all(
+      referredUsers.map(async (user) => {
+        const deposit = await Recharge.findOne({
+          userId: user._id,
+          status: "approved",
+        });
+
+        return {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+          hasDeposited: !!deposit,
+        };
+      })
+    );
+
+    res.status(200).json({
+      referredCount: usersWithDepositStatus.length,
+      referredUsers: usersWithDepositStatus,
+    });
+  } catch (error) {
+    console.error("Error in getReferredUsers:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -246,5 +283,6 @@ module.exports = {
   resetPassword,
   getReferralCode,
   getAllUsers,
-  getTotalWalletBalance
+  getTotalWalletBalance,
+  getReferredUsers
 };
