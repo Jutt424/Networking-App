@@ -21,6 +21,7 @@ import DepositRequests from './pages/Dashboard/DepositRequests'
 import History from './pages/History'
 import { authAPI } from './services/api'
 import { Dialog, Transition } from '@headlessui/react'
+import Promotions from './pages/Promotions'
 
 
 // Protected Route Component
@@ -117,7 +118,7 @@ function App() {
               }
             />
             <Route
-              path="/tasks"
+              path="/packages"
               element={
                 <ProtectedRoute>
                   <Layout>
@@ -152,6 +153,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <History />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/promotions"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Promotions />
                   </Layout>
                 </ProtectedRoute>
               }

@@ -32,20 +32,20 @@ const Footer = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mx-auto"
                 fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-              />
-            </svg>
-            <span className="text-xs text-white">History</span>
-          </button>
+                viewBox="0 0 24 24"
+                stroke="white"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+              <span className="text-xs text-white">History</span>
+            </button>
           </Link>
-          <Link to="/tasks">
+          <Link to="/packages">
             <button className="text-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -64,6 +64,26 @@ const Footer = () => {
               <span className="text-xs text-white">Packages</span>
             </button>
           </Link>
+          <Link to="/promotions">
+            <button className="text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7m16 0H4m16 0l-2.586-2.586a2 2 0 00-2.828 0L12 12l-2.586-2.586a2 2 0 00-2.828 0L4 12m16-6V4a2 2 0 00-2-2h-2a2 2 0 00-2 2v2h6zm-6 0V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2h6z"
+                />
+              </svg>
+              <span className="text-xs text-white">Promotions</span>
+            </button>
+          </Link>
+
           <Link to="/profile">
             <button className="text-center">
               <svg

@@ -80,7 +80,6 @@ export const paymentAPI = {
     getAllPayments: () =>
         API.get('/api/payments/get-all-payments'),
 
-
     recharge: (formData) =>
         API.post('/api/recharge', formData, {
             headers: {
@@ -105,6 +104,10 @@ export const investmentAPI = {
         API.post('/api/investment/invest', data),
     getUserInvestments: (userId) =>
         API.get(`/api/investment/getUserInvestments/${userId}`),
+    getUserInvestmentProfits: (userId) =>
+        API.get(`/api/investment/getUserInvestmentProfits/${userId}`),
+    getUserInvestmentHistory: (userId) =>
+        API.get(`/api/investment/getUserInvestmentProfits/${userId}`),
 };
 
 export default API;

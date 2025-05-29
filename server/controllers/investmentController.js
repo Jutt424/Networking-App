@@ -47,5 +47,38 @@ const getUserInvestments = async (req, res) => {
       res.status(500).json({ message: "Error fetching user investments" });
     }
   };
-
-module.exports = { investInPlan, getUserInvestments };
+  const getUserInvestmentProfits = async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      const investments = await Investment.find({ userId }).populate('planId');
+  
+      const investmentDetails = investments.map((inv) => {
+        if (!inv.planId) return null;
+  
+        const now = new Date();
+        const investedOn = new Date(inv.createdAt);
+        const timeDiff = now - investedOn;
+        const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  
+        const totalProfitEarned = daysPassed * inv.profitPerDay;
+  
+        return {
+          coin: inv.planId.coin,
+          investedAmount: inv.amount,
+          dailyProfit: inv.profitPerDay,
+          nextProfitTime: inv.nextProfitTime,
+          investedOn,
+          daysPassed,
+          totalProfitEarned
+        };
+      }).filter(item => item !== null);
+  
+      return res.json({ investments: investmentDetails });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error fetching investment profits" });
+    }
+  };
+  
+module.exports = { investInPlan, getUserInvestments, getUserInvestmentProfits };
