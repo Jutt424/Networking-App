@@ -7,6 +7,7 @@ const paymentSchema = mongoose.Schema({
   bankName: { type: String, default: null }, // Only for bank payments
   amount: { type: Number, required: true },
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }, // Default 'pending'
+  fee: { type: Number, default: 0 },      // naya field
 }, { timestamps: true });
 
 const Payment = mongoose.model('Payment', paymentSchema);

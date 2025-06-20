@@ -35,8 +35,8 @@ const userSchema = mongoose.Schema(
       ref: 'User',
       default: null,
     },
-    
-    
+    referralsCount:  { type: Number, default: 0 },     // ✅ successful deposits by referrals
+    freeWithdrawUsed:{ type: Boolean, default: false } // ✅ withdraw flag
   },
   {
     timestamps: true,

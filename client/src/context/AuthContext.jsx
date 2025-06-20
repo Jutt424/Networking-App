@@ -19,12 +19,16 @@ const AuthProvider = ({ children }) => {
         try {
           const response = await authAPI.getProfile();
           setUser(response.data);
-          // console.log(response.data);
           setIsAuthenticated(true);
         } catch (error) {
           console.error('Auth check failed:', error);
           localStorage.removeItem('token');
+          setUser(null);
+          setIsAuthenticated(false);
         }
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
       }
       setLoading(false);
     };
@@ -53,7 +57,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    authAPI.logout();
+    localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
     navigate('/auth/login');

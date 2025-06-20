@@ -22,6 +22,8 @@ import History from './pages/History'
 import { authAPI } from './services/api'
 import { Dialog, Transition } from '@headlessui/react'
 import Promotions from './pages/Promotions'
+import AdminDashboardContent from './pages/Dashboard/AdminDashboardContent'
+import LoadingSpinner from './components/LoadingSpinner'
 
 
 // Protected Route Component
@@ -29,11 +31,30 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useContext(AuthContext);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner message="Checking authentication..." />;
   }
 
   if (!isAuthenticated) {
     return <Navigate to="/auth/login" />;
+  }
+
+  return children;
+};
+
+// Admin Route Component
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <LoadingSpinner message="Checking admin access..." />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth/login" />;
+  }
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/" />;
   }
 
   return children;
@@ -167,17 +188,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            
+            {/* Admin Routes */}
+            <Route path="/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>}>
+              <Route index element={<AdminDashboardContent />} />
+              <Route path="withdraw-requests" element={<WithdrawRequests />} />
+              <Route path="deposit-requests" element={<DepositRequests />} />
+            </Route>
        
             {/* Catch all route - redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
-            
-            {user?.role === 'admin' && (
-              <>
-                <Route path="/dashboard" element={<AdminDashboard />} />
-                <Route path="/withdraw-requests" element={<WithdrawRequests />} />
-                <Route path="/deposit-requests" element={<DepositRequests />} />
-              </>
-            )}
           </Routes>
         <ToastContainer
           position="top-right"

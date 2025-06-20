@@ -203,7 +203,30 @@ const getMe = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password');
+    const users = await User.aggregate([
+      {
+        $lookup: {
+          from: "wallets", // confirmed collection name
+          localField: "_id",
+          foreignField: "userId",
+          as: "walletInfo"
+        }
+      },
+      {
+        $addFields: {
+          walletBalance: {
+            $ifNull: [{ $arrayElemAt: ["$walletInfo.wallet", 0] }, 0]
+          }
+        }
+      },
+      {
+        $project: {
+          password: 0,
+          walletInfo: 0 // hides raw joined array
+        }
+      }
+    ]);
+
     const total = await User.countDocuments();
 
     res.status(200).json({
@@ -211,10 +234,11 @@ const getAllUsers = async (req, res) => {
       users,
     });
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching users with wallet:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 const getTotalWalletBalance = async (req, res) => {
   try {

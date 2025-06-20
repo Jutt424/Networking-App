@@ -93,6 +93,12 @@ const recharge = async (req, res) => {
               { $inc: { wallet: 2 } },
               { upsert: true }
             );
+
+            // increment referrer's referralsCount
+            await User.findByIdAndUpdate(
+              user.referredBy,
+              { $inc: { referralsCount: 1 } }
+            );
           }
         
           await wallet.save();
